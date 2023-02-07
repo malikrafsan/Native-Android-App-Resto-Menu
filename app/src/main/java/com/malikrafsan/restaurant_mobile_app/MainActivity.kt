@@ -12,10 +12,12 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.malikrafsan.restaurant_mobile_app.api.BranchApi
 import com.malikrafsan.restaurant_mobile_app.api.MenuApi
+import com.malikrafsan.restaurant_mobile_app.api.Payment
 import com.malikrafsan.restaurant_mobile_app.builder.ApiBuilder
 import com.malikrafsan.restaurant_mobile_app.databinding.ActivityMainBinding
 import com.malikrafsan.restaurant_mobile_app.dto.Branch
 import com.malikrafsan.restaurant_mobile_app.dto.Menu
+import com.malikrafsan.restaurant_mobile_app.dto.PayResponse
 
 import retrofit2.Call
 import retrofit2.Response
@@ -45,6 +47,28 @@ private lateinit var binding: ActivityMainBinding
         loadFoodMenu()
         loadDrinkMenu()
         loadBranch()
+        pay()
+    }
+
+    private fun pay() {
+        val paymentApi = ApiBuilder.buildApi(Payment::class.java)
+        val requestCall = paymentApi.pay("valgkhmefzopsyxfknejiahjzhhxthlo")
+
+        requestCall.enqueue(object : Callback<PayResponse> {
+            override fun onResponse(call: Call<PayResponse>, response: Response<PayResponse>) {
+                if (response.isSuccessful) {
+                    response.body()?.let {
+                        Log.d("PAYMENT", it.toString())
+                    }
+                } else {
+                    Log.d("PAYMENT", "UNSUCCESSFUL: " + response.errorBody().toString())
+                }
+            }
+            override fun onFailure(call: Call<PayResponse>, t: Throwable) {
+                Toast.makeText(this@MainActivity, "${t.message}", Toast.LENGTH_SHORT).show()
+                Log.d("PAYMENT", "FAILED: " + t.message.toString())
+            }
+        })
     }
 
     private fun loadMenu() {
