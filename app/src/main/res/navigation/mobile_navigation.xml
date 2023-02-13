@@ -3,23 +3,29 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
+    app:startDestination="@+id/navigation_menu">
 
     <fragment
-        android:id="@+id/navigation_home"
-        android:name="com.malikrafsan.restaurant_mobile_app.ui.home.HomeFragment"
-        android:label="@string/title_home"
+        android:id="@+id/navigation_twibbon"
+        android:name="com.malikrafsan.restaurant_mobile_app.ui.twibbon.TwibbonFragment"
+        android:label="Twibbon"
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.malikrafsan.restaurant_mobile_app.ui.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
+        android:id="@+id/navigation_lokasi"
+        android:name="com.malikrafsan.restaurant_mobile_app.ui.restaurant.RestaurantFragment"
+        android:label="Lokasi"
         tools:layout="@layout/fragment_dashboard" />
 
     <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="com.malikrafsan.restaurant_mobile_app.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
+        android:id="@+id/navigation_menu"
+        android:name="com.malikrafsan.restaurant_mobile_app.ui.keranjang.MenuFragment"
+        android:label="Menu"
+        tools:layout="@layout/fragment_notifications" />
+
+    <fragment
+        android:id="@+id/navigation_keranjang"
+        android:name="com.malikrafsan.restaurant_mobile_app.ui.keranjang.KeranjangFragment"
+        android:label="Keranjang"
         tools:layout="@layout/fragment_notifications" />
 </navigation>
