@@ -9,23 +9,23 @@
         android:id="@+id/navigation_twibbon"
         android:name="com.malikrafsan.restaurant_mobile_app.ui.twibbon.TwibbonFragment"
         android:label="Twibbon"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_twibbon" />
 
     <fragment
         android:id="@+id/navigation_lokasi"
         android:name="com.malikrafsan.restaurant_mobile_app.ui.restaurant.RestaurantFragment"
         android:label="Lokasi"
-        tools:layout="@layout/fragment_dashboard" />
+        tools:layout="@layout/fragment_restaurant" />
 
     <fragment
         android:id="@+id/navigation_menu"
         android:name="com.malikrafsan.restaurant_mobile_app.ui.keranjang.MenuFragment"
         android:label="Menu"
-        tools:layout="@layout/fragment_notifications" />
+        tools:layout="@layout/fragment_menu" />
 
     <fragment
         android:id="@+id/navigation_keranjang"
         android:name="com.malikrafsan.restaurant_mobile_app.ui.keranjang.KeranjangFragment"
         android:label="Keranjang"
-        tools:layout="@layout/fragment_notifications" />
+        tools:layout="@layout/fragment_keranjang" />
 </navigation>
