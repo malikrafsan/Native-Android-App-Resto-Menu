@@ -52,15 +52,6 @@ private var isTemperatureSensorAvailable: Boolean = false
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
-        findViewById<Button>(R.id.pay_button).setOnClickListener {
-            startActivity(
-                Intent(
-                    this,
-                    ScanPaymentActivity::class.java
-                )
-            )
-        }
-
 //        sensorManager = SensorManager getSystemService(SENSOR_SERVICE)
         sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
         if (sensorManager.getDefaultSensor(Sensor.TYPE_TEMPERATURE) != null) {
