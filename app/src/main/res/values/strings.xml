@@ -7,4 +7,6 @@
     <string name="textViewFoodMenuLabel">Food Menu:</string>
     <string name="textViewDrinkMenuLabel">Drink Menu:</string>
     <string name="textViewBranchLabel">Branch</string>
+    <string name="bayar">Bayar</string>
+    <string name="temperature">Temperature:</string>
 </resources>

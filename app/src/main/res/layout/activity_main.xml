@@ -30,42 +30,32 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:navGraph="@navigation/mobile_navigation"
-    />
+        app:navGraph="@navigation/mobile_navigation" />
+
+
 
     <LinearLayout
-        android:layout_width="380dp"
-        android:layout_height="621dp"
-        android:layout_marginTop="4dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.516"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/nav_host_fragment_activity_main">
+        tools:layout_editor_absoluteX="86dp"
+        tools:layout_editor_absoluteY="291dp">
 
-        <TextView
-            android:id="@+id/textViewMenu"
+
+        <Button
+            android:id="@+id/pay_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/textViewMenuLabel" />
+            android:text="@string/bayar" />
 
         <TextView
-            android:id="@+id/textViewFoodMenu"
-            android:layout_width="match_parent"
+            android:id="@+id/textViewTemperature"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/textViewFoodMenuLabel" />
+            android:text="@string/temperature"
+            tools:layout_editor_absoluteX="173dp"
+            tools:layout_editor_absoluteY="107dp" />
 
-        <TextView
-            android:id="@+id/textViewDrinkMenu"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/textViewDrinkMenuLabel" />
-
-        <TextView
-            android:id="@+id/textViewBranch"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/textViewBranchLabel" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
