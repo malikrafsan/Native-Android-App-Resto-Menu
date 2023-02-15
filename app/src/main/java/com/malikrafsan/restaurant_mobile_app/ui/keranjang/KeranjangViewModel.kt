@@ -4,10 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class KeranjangViewModel : ViewModel() {
+class KeranjangViewModel(val namaMakanan: String, val hargaMakanan: String, val terjualMakanan: Int) : ViewModel() {
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is Keranjang Fragment"
-    }
-    val text: LiveData<String> = _text
 }

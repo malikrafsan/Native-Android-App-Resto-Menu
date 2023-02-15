@@ -6,6 +6,23 @@
     android:layout_height="match_parent"
     tools:context=".ui.keranjang.KeranjangFragment">
 
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".MainActivity">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:itemCount="5"
+            tools:listitem="@layout/fragment_daftar_menu" />
+
+    </LinearLayout>
+
     <Button
         android:id="@+id/bayar"
         android:layout_width="wrap_content"
