@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="120dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginTop="16dp"
     android:layout_marginHorizontal="16dp">
 
     <androidx.cardview.widget.CardView
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:id="@+id/card_view"
         android:layout_gravity="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        card_view:cardBackgroundColor="@color/teal_700"
-        card_view:cardCornerRadius="4dp">
+        app:cardBackgroundColor="@color/teal_700"
+        app:contentPadding="10dp"
+        app:cardElevation="6dp"
+        app:cardCornerRadius="4dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -29,6 +30,13 @@
                 android:textSize="24dp"
                 android:text="nama_makanan"/>
 
+            <TextView
+                android:id="@+id/hargaMakanan"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:text="Harga" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -40,18 +48,13 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/hargaMakanan"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textColor="@color/white"
-                        android:text="Name" />
-
-                    <TextView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:textAlignment="center"
-                        android:layout_marginHorizontal="10dp"
-                        android:text="Terjual: "/>
+                        android:text="Terjual: "
+                        android:layout_marginTop="15dp"
+                        android:layout_marginRight="90dp"
+                        />
 
                 </LinearLayout>
 
@@ -71,11 +74,13 @@
                         android:textAlignment="center"
                         android:layout_marginHorizontal="10dp"
                         android:text="0"/>
-                    <Button
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="plus"/>
+
                 </LinearLayout>
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="plus" />
 
             </LinearLayout>
 
