@@ -15,6 +15,18 @@
         tools:layout_editor_absoluteX="16dp"
         tools:layout_editor_absoluteY="-76dp">
 
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/searchView"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="8dp"
+            android:layout_marginHorizontal="8dp"
+            app:queryHint="@string/placeholder_search"
+            app:defaultQueryHint="@string/placeholder_search"
+            android:background="@drawable/searchbar_bg"
+            app:iconifiedByDefault="false"/>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/menuMakananRecyclerView"
             android:layout_width="match_parent"
