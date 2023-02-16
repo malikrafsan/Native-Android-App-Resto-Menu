@@ -20,11 +20,15 @@ class CartViewModel @Inject constructor(
         when(event){
             is CartEvent.ChangeQty -> {
                 viewModelScope.launch {
-                    repository.insert(
-                        event.cart.copy(
-                            qty = event.qty
+                    if (event.qty == 0) {
+                        repository.delete(event.cart)
+                    } else {
+                        repository.insert(
+                            event.cart.copy(
+                                qty = event.qty
+                            )
                         )
-                    )
+                    }
                 }
             }
             is CartEvent.onAddClick -> {

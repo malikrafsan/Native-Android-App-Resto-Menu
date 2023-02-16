@@ -34,12 +34,12 @@ class KeranjangFragment : Fragment() {
     private var carts: MutableList<Cart> = mutableListOf()
     private var totalAmount: Int = 0
     private val viewModel: CartViewModel by viewModels()
+    private var random = Random(100)
 
   // This property is only valid between onCreateView and
   // onDestroyView.
 
-    private fun registerEvent(inflater: LayoutInflater, container: ViewGroup?) {
-        val view: View = inflater!!.inflate(com.malikrafsan.restaurant_mobile_app.R.layout.fragment_keranjang, container, false)
+    private fun registerEvent(view: View) {
         view.findViewById<Button>(com.malikrafsan.restaurant_mobile_app.R.id.bayar).setOnClickListener {
             startActivity(
                 Intent(
@@ -50,13 +50,14 @@ class KeranjangFragment : Fragment() {
         }
         view.findViewById<Button>(com.malikrafsan.restaurant_mobile_app.R.id.addNewCart).setOnClickListener {
             val menuData = MenuData(
-                name = "Makanan 1",
+                name = "Makanan ${random.nextInt()}",
                 price = 50000,
                 description = "Makanan 1",
                 currency = "IDR",
                 sold = 90,
                 type = "Food",
             )
+            Log.d("Carts", carts.toString())
 
             val cart = Cart.fromMenu(menuData)
             viewModel.onEvent(CartEvent.onAddClick(cart))
@@ -66,52 +67,67 @@ class KeranjangFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        registerEvent(inflater, container)
-
-        // getting the recyclerview by its id
-        val recyclerview = view?.findViewById<RecyclerView>(com.malikrafsan.restaurant_mobile_app.R.id.recyclerview)
-
-        // this creates a vertical layout Manager
-        recyclerview?.layoutManager = LinearLayoutManager(requireContext())
-
-        // ArrayList of class ItemsViewModel
-//        val data = ArrayList<KeranjangViewModel>()
-
-//        // This loop will create 20 Views containing
-//        // the image with the count of view
-//        for (i in 1..20) {
-//            data.add(KeranjangViewModel("Makanan ke " + i.toString(), hargaMakanan = "50000", terjualMakanan = 1))
-//        }
-
-        // This will pass the ArrayList to our Adapter
-        val adapter = KeranjangAdapter(
-            requireContext(),
-            carts,
-            viewModel
-        )
-
-        // Setting the Adapter with the recyclerview
-        recyclerview?.adapter = adapter
-
-        return view
+    ): View {
+        this._binding = FragmentKeranjangBinding.inflate(inflater, container, false)
+        return binding.root
+//        registerEvent(inflater, container)
+//
+//        // getting the recyclerview by its id
+//        val recyclerview = view?.findViewById<RecyclerView>(com.malikrafsan.restaurant_mobile_app.R.id.recyclerview)
+//
+//        // this creates a vertical layout Manager
+//        recyclerview?.layoutManager = LinearLayoutManager(requireContext())
+//
+//        // ArrayList of class ItemsViewModel
+////        val data = ArrayList<KeranjangViewModel>()
+//
+////        // This loop will create 20 Views containing
+////        // the image with the count of view
+////        for (i in 1..20) {
+////            data.add(KeranjangViewModel("Makanan ke " + i.toString(), hargaMakanan = "50000", terjualMakanan = 1))
+////        }
+//
+//        // This will pass the ArrayList to our Adapter
+//        val adapter = KeranjangAdapter(
+//            requireContext(),
+//            carts,
+//            viewModel
+//        )
+//
+//        // Setting the Adapter with the recyclerview
+//        recyclerview?.adapter = adapter
+//
+//        return view
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
 
     private fun collectCart(lst: List<Cart>) {
-        this.carts = lst as MutableList<Cart>
+        this.carts.clear()
+//        this.carts = lst as MutableList<Cart>
         this.totalAmount = 0
+        Log.d("this Carts", this.carts.toString())
         lst.forEach {
+            this.carts.add(it)
             this.totalAmount += it.price * it.qty
         }
-        this.recyclerView.adapter?.notifyDataSetChanged()
+        Log.d("test", "up")
+
+        recyclerView.adapter?.notifyDataSetChanged()
+        Log.d("test", "end")
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         recyclerView = binding.recyclerview
         recyclerView.layoutManager = LinearLayoutManager(context)
+        recyclerView.adapter = KeranjangAdapter(
+            requireContext(),
+            carts,
+            viewModel
+        )
+
+        registerEvent(view)
 
         Log.i("Collect", "Upper")
         viewLifecycleOwner.lifecycleScope.launch{

@@ -38,7 +38,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="63dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="140dp"
         android:background="#901C18"
         android:backgroundTint="#901C18"
         android:text="Add Cart"

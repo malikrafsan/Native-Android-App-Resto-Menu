@@ -1,14 +1,16 @@
 package com.malikrafsan.restaurant_mobile_app.ui.keranjang
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.malikrafsan.restaurant_mobile_app.entity.Cart
-import com.malikrafsan.restaurant_mobile_app.ui.keranjang.KeranjangViewModel
+import com.malikrafsan.restaurant_mobile_app.event.CartEvent
 
 class KeranjangAdapter(
     private val ctx: Context,
@@ -28,6 +30,7 @@ class KeranjangAdapter(
 
     // binds the list items to a view
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        Log.d("KeranjangAdapter", "onBindViewHolder: ${data[position]}")
 
         val datum = this.data[position]
 
@@ -37,7 +40,13 @@ class KeranjangAdapter(
         // sets the text to the textview from our itemHolder class
         holder.harga.text = datum.price.toString()
 
-        holder.qtyPesanan.text = datum.sold.toString()
+        holder.qtyPesanan.text = datum.qty.toString()
+        holder.plusQtyBtn.setOnClickListener {
+            cartViewModel.onEvent(CartEvent.ChangeQty(datum, datum.qty + 1))
+        }
+        holder.minusQtyBtn.setOnClickListener {
+            cartViewModel.onEvent(CartEvent.ChangeQty(datum, datum.qty - 1))
+        }
 
     }
 
@@ -51,5 +60,8 @@ class KeranjangAdapter(
         val nama: TextView = itemView.findViewById(com.malikrafsan.restaurant_mobile_app.R.id.namaMakanan)
         val harga: TextView = itemView.findViewById(com.malikrafsan.restaurant_mobile_app.R.id.hargaMakanan)
         val qtyPesanan: TextView = itemView.findViewById(com.malikrafsan.restaurant_mobile_app.R.id.jumlahMakanan)
+
+        val plusQtyBtn: Button = itemView.findViewById(com.malikrafsan.restaurant_mobile_app.R.id.plusQtyButton)
+        val minusQtyBtn: Button = itemView.findViewById(com.malikrafsan.restaurant_mobile_app.R.id.minusQtyButton)
     }
 }

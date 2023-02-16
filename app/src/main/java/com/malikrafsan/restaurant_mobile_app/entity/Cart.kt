@@ -17,7 +17,7 @@ data class Cart(
     val qty: Int,
 ) {
     companion object {
-        fun createId(menu: MenuData): String {
+        private fun createId(menu: MenuData): String {
             return "${menu.name}-${menu.price}-${menu.currency}-${menu.type}"
         }
 
