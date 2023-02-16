@@ -1,14 +1,20 @@
 package com.malikrafsan.restaurant_mobile_app.ui.keranjang
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.malikrafsan.restaurant_mobile_app.entity.Cart
 import com.malikrafsan.restaurant_mobile_app.ui.keranjang.KeranjangViewModel
 
-class KeranjangAdapter(private val mList: List<KeranjangViewModel>) : RecyclerView.Adapter<KeranjangAdapter.ViewHolder>() {
+class KeranjangAdapter(
+    private val ctx: Context,
+    private val data: List<Cart>,
+    private val cartViewModel: CartViewModel
+) : RecyclerView.Adapter<KeranjangAdapter.ViewHolder>() {
 
     // create new views
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -23,27 +29,27 @@ class KeranjangAdapter(private val mList: List<KeranjangViewModel>) : RecyclerVi
     // binds the list items to a view
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
-        val KeranjangViewModel = mList[position]
+        val datum = this.data[position]
 
         // sets the image to the imageview from our itemHolder class
-        holder.namaMakanan.text = KeranjangViewModel.namaMakanan
+        holder.nama.text = datum.name
 
         // sets the text to the textview from our itemHolder class
-        holder.hargaMakanan.text = KeranjangViewModel.hargaMakanan
+        holder.harga.text = datum.price.toString()
 
-        holder.terjualMakanan.text = KeranjangViewModel.terjualMakanan.toString()
+        holder.qtyPesanan.text = datum.sold.toString()
 
     }
 
     // return the number of the items in the list
     override fun getItemCount(): Int {
-        return mList.size
+        return this.data.size
     }
 
     // Holds the views for adding it to image and text
     class ViewHolder(ItemView: View) : RecyclerView.ViewHolder(ItemView) {
-        val namaMakanan: TextView = itemView.findViewById(com.malikrafsan.restaurant_mobile_app.R.id.namaMakanan)
-        val hargaMakanan: TextView = itemView.findViewById(com.malikrafsan.restaurant_mobile_app.R.id.hargaMakanan)
-        val terjualMakanan: TextView = itemView.findViewById(com.malikrafsan.restaurant_mobile_app.R.id.jumlahMakanan)
+        val nama: TextView = itemView.findViewById(com.malikrafsan.restaurant_mobile_app.R.id.namaMakanan)
+        val harga: TextView = itemView.findViewById(com.malikrafsan.restaurant_mobile_app.R.id.hargaMakanan)
+        val qtyPesanan: TextView = itemView.findViewById(com.malikrafsan.restaurant_mobile_app.R.id.jumlahMakanan)
     }
 }

@@ -24,11 +24,13 @@ import com.malikrafsan.restaurant_mobile_app.databinding.ActivityMainBinding
 import com.malikrafsan.restaurant_mobile_app.dto.Branch
 import com.malikrafsan.restaurant_mobile_app.dto.Menu
 import com.malikrafsan.restaurant_mobile_app.dto.PayResponse
+import dagger.hilt.android.AndroidEntryPoint
 
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.Callback
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity(), SensorEventListener {
 
 private lateinit var binding: ActivityMainBinding
@@ -52,10 +54,9 @@ private var isTemperatureSensorAvailable: Boolean = false
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
-//        sensorManager = SensorManager getSystemService(SENSOR_SERVICE)
         sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
-        if (sensorManager.getDefaultSensor(Sensor.TYPE_TEMPERATURE) != null) {
-            sensor = sensorManager.getDefaultSensor(Sensor.TYPE_TEMPERATURE)
+        if (sensorManager.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE) != null) {
+            sensor = sensorManager.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE)
             isTemperatureSensorAvailable = true
         } else {
             findViewById<TextView>(R.id.textViewTemperature).text = "Temperature sensor is not available"
