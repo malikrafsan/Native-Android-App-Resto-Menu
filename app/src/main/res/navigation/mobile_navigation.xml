@@ -19,7 +19,7 @@
 
     <fragment
         android:id="@+id/navigation_menu"
-        android:name="com.malikrafsan.restaurant_mobile_app.ui.keranjang.MenuFragment"
+        android:name="com.malikrafsan.restaurant_mobile_app.ui.menu.MenuFragment"
         android:label="Menu"
         tools:layout="@layout/fragment_menu" />
 
