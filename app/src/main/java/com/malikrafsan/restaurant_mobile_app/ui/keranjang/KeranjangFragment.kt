@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -35,6 +36,7 @@ class KeranjangFragment : Fragment() {
     private var totalAmount: Int = 0
     private val viewModel: CartViewModel by viewModels()
     private var random = Random(100)
+    private lateinit var totalPriceTextView: TextView
 
   // This property is only valid between onCreateView and
   // onDestroyView.
@@ -64,40 +66,16 @@ class KeranjangFragment : Fragment() {
         }
     }
 
+    private fun registerElmt(view: View) {
+        totalPriceTextView = view.findViewById(com.malikrafsan.restaurant_mobile_app.R.id.total_price)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         this._binding = FragmentKeranjangBinding.inflate(inflater, container, false)
         return binding.root
-//        registerEvent(inflater, container)
-//
-//        // getting the recyclerview by its id
-//        val recyclerview = view?.findViewById<RecyclerView>(com.malikrafsan.restaurant_mobile_app.R.id.recyclerview)
-//
-//        // this creates a vertical layout Manager
-//        recyclerview?.layoutManager = LinearLayoutManager(requireContext())
-//
-//        // ArrayList of class ItemsViewModel
-////        val data = ArrayList<KeranjangViewModel>()
-//
-////        // This loop will create 20 Views containing
-////        // the image with the count of view
-////        for (i in 1..20) {
-////            data.add(KeranjangViewModel("Makanan ke " + i.toString(), hargaMakanan = "50000", terjualMakanan = 1))
-////        }
-//
-//        // This will pass the ArrayList to our Adapter
-//        val adapter = KeranjangAdapter(
-//            requireContext(),
-//            carts,
-//            viewModel
-//        )
-//
-//        // Setting the Adapter with the recyclerview
-//        recyclerview?.adapter = adapter
-//
-//        return view
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -113,6 +91,7 @@ class KeranjangFragment : Fragment() {
             this.totalAmount += it.price * it.qty
         }
         Log.d("test", "up")
+        this.totalPriceTextView.text = "Rp $totalAmount"
 
         recyclerView.adapter?.notifyDataSetChanged()
         Log.d("test", "end")
@@ -127,7 +106,9 @@ class KeranjangFragment : Fragment() {
             viewModel
         )
 
+
         registerEvent(view)
+        registerElmt(view)
 
         Log.i("Collect", "Upper")
         viewLifecycleOwner.lifecycleScope.launch{
