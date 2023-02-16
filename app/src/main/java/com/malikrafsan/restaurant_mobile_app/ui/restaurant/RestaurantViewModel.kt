@@ -4,10 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class RestaurantViewModel : ViewModel() {
+class RestaurantViewModel(val namaRestaurant: String, val alamatRestaurant: String, val telpRestaurant: String, val longitude: String, val latitude: String) : ViewModel() {
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is Restaurant Fragment"
-    }
-    val text: LiveData<String> = _text
 }

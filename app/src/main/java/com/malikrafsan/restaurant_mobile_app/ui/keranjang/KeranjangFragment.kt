@@ -50,20 +50,6 @@ class KeranjangFragment : Fragment() {
                 )
             )
         }
-        view.findViewById<Button>(com.malikrafsan.restaurant_mobile_app.R.id.addNewCart).setOnClickListener {
-            val menuData = MenuData(
-                name = "Makanan ${random.nextInt()}",
-                price = 50000,
-                description = "Makanan 1",
-                currency = "IDR",
-                sold = 90,
-                type = "Food",
-            )
-            Log.d("Carts", carts.toString())
-
-            val cart = Cart.fromMenu(menuData)
-            viewModel.onEvent(CartEvent.onAddClick(cart))
-        }
     }
 
     private fun registerElmt(view: View) {
