@@ -29,7 +29,7 @@ class RestaurantAdapter (private val data: ArrayList<RestaurantViewModel>): Recy
 
         holder.namaRestaurant.text = datum.namaRestaurant
         holder.alamatRestaurant.text = datum.alamatRestaurant
-        holder.telpRestaurant.text = "100"
+        holder.telpRestaurant.text = datum.telpRestaurant
         val context = holder.telpRestaurant.context
         holder.mapsButton.setOnClickListener {
             val gmmIntentUri = Uri.parse("http://maps.google.com/maps?saddr=20.344,34.34&daddr=20.5666,45.345")
