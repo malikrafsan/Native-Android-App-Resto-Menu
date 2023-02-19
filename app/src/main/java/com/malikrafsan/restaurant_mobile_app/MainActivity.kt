@@ -63,10 +63,10 @@ private var isTemperatureSensorAvailable: Boolean = false
             isTemperatureSensorAvailable = false
         }
 
-        loadMenu()
-        loadFoodMenu()
-        loadDrinkMenu()
-        loadBranch()
+//        loadMenu()
+//        loadFoodMenu()
+//        loadDrinkMenu()
+//        loadBranch()
     }
 
     override fun onSensorChanged(event: SensorEvent?) {

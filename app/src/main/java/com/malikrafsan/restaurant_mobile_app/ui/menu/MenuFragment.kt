@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
@@ -23,67 +22,89 @@ import kotlin.collections.ArrayList
 class MenuFragment : Fragment() {
 
     private var _binding = null
-    private lateinit var makananRecyclerView: RecyclerView
-    private lateinit var minumanRecyclerView: RecyclerView
+
+    // This property is only valid between onCreateView and
+    // onDestroyView.
+    private lateinit var menuMakananRecyclerView: RecyclerView
+    private lateinit var menuMinumanRecyclerView: RecyclerView
     private lateinit var searchView: SearchView
     private lateinit var makananAdapter: MenuAdapter
     private lateinit var minumanAdapter: MenuAdapter
-    private val allMenu: ArrayList<MenuViewModel> = ArrayList<MenuViewModel>()
-    private val menuMakanan: ArrayList<MenuViewModel> = ArrayList<MenuViewModel>()
-    private val tempMenuMakanan: ArrayList<MenuViewModel> = ArrayList<MenuViewModel>()
-    private val menuMinuman: ArrayList<MenuViewModel> = ArrayList<MenuViewModel>()
+    private val menuMakanan: ArrayList<MenuViewModel> = ArrayList()
+    private val tempMenuMakanan: ArrayList<MenuViewModel> = ArrayList()
+    private val menuMinuman: ArrayList<MenuViewModel> = ArrayList()
+    private val tempMenuMinuman: ArrayList<MenuViewModel> = ArrayList()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view : View = inflater!!.inflate(com.malikrafsan.restaurant_mobile_app.R.layout.fragment_menu, container, false)
-
-        makananRecyclerView = view.findViewById(com.malikrafsan.restaurant_mobile_app.R.id.menuMakananRecyclerView)
-        makananRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+        val view: View = inflater!!.inflate(
+            com.malikrafsan.restaurant_mobile_app.R.layout.fragment_menu,
+            container,
+            false
+        )
 
         loadMenu()
-//        loadFoodMenu()
-//        loadDrinkMenu()
-        makananAdapter = MenuAdapter(tempMenuMakanan)
-        makananRecyclerView.adapter = makananAdapter
 
-//        minumanRecyclerView = view.findViewById(com.malikrafsan.restaurant_mobile_app.R.id.menuMinumanRecyclerView)
-//        minumanRecyclerView.layoutManager = LinearLayoutManager(requireContext())
-//        minumanAdapter = MenuAdapter(menuMinuman)
-//        minumanRecyclerView.adapter = minumanAdapter
+        return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        menuMakananRecyclerView =
+            view.findViewById(com.malikrafsan.restaurant_mobile_app.R.id.menuMakananRecyclerView)
+        menuMakananRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+
+        menuMinumanRecyclerView =
+            view.findViewById(com.malikrafsan.restaurant_mobile_app.R.id.menuMinumanRecyclerView)
+        menuMinumanRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+
+        makananAdapter = MenuAdapter(tempMenuMakanan)
+        menuMakananRecyclerView.adapter = makananAdapter
+
+        minumanAdapter = MenuAdapter(tempMenuMinuman)
+        menuMinumanRecyclerView.adapter = minumanAdapter
 
         searchView = view.findViewById(com.malikrafsan.restaurant_mobile_app.R.id.searchView)
         searchView.clearFocus()
         searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                TODO("Not yet implemented")
+                return true
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 val searchText = newText!!.lowercase()
                 if (searchText.isNotEmpty()) {
                     tempMenuMakanan.clear()
+                    tempMenuMinuman.clear()
                     menuMakanan.forEach {
                         if (it.name.lowercase().contains(searchText)) {
                             tempMenuMakanan.add((it))
                         }
                     }
-                    makananRecyclerView.adapter!!.notifyDataSetChanged()
+                    menuMinuman.forEach {
+                        if (it.name.lowercase().contains(searchText)) {
+                            tempMenuMinuman.add((it))
+                        }
+                    }
+                    menuMakananRecyclerView.adapter!!.notifyDataSetChanged()
+                    menuMinumanRecyclerView.adapter!!.notifyDataSetChanged()
                 } else {
                     tempMenuMakanan.clear()
                     tempMenuMakanan.addAll(menuMakanan)
-                    makananRecyclerView.adapter!!.notifyDataSetChanged()
+                    menuMakananRecyclerView.adapter!!.notifyDataSetChanged()
+
+                    tempMenuMinuman.clear()
+                    tempMenuMinuman.addAll(menuMinuman)
+                    menuMinumanRecyclerView.adapter!!.notifyDataSetChanged()
                 }
 
                 return true
             }
         })
-
-
-
-        return view
     }
 
     private fun loadMenu() {
@@ -91,69 +112,54 @@ class MenuFragment : Fragment() {
         val requestCall = menu.getMenu()
 
         requestCall.enqueue(object : Callback<com.malikrafsan.restaurant_mobile_app.dto.Menu> {
-            override fun onResponse(call: Call<com.malikrafsan.restaurant_mobile_app.dto.Menu>, response: Response<com.malikrafsan.restaurant_mobile_app.dto.Menu>) {
+            override fun onResponse(
+                call: Call<com.malikrafsan.restaurant_mobile_app.dto.Menu>,
+                response: Response<com.malikrafsan.restaurant_mobile_app.dto.Menu>
+            ) {
                 if (response.isSuccessful) {
-                    val fetchedMenu: com.malikrafsan.restaurant_mobile_app.dto.Menu? = response.body()
+                    val fetchedMenuMakanan: com.malikrafsan.restaurant_mobile_app.dto.Menu? =
+                        response.body()
 
-                    fetchedMenu?.data?.forEach {
-                        val m : MenuViewModel = MenuViewModel(it.name,it.currency, it.price, it.sold, it.description, it.type)
-                        allMenu.add(m)
+                    fetchedMenuMakanan?.data?.forEach {
                         if (it.type == "Food") {
-                            menuMakanan.add(m)
-                            tempMenuMakanan.add(m)
+                            menuMakanan.add(
+                                MenuViewModel(
+                                    it.name,
+                                    it.currency,
+                                    it.price,
+                                    it.sold,
+                                    it.description,
+                                    it.type
+                                )
+                            )
                         } else {
-                            menuMinuman.add(m)
+                            menuMinuman.add(
+                                MenuViewModel(
+                                    it.name,
+                                    it.currency,
+                                    it.price,
+                                    it.sold,
+                                    it.description,
+                                    it.type
+                                )
+                            )
                         }
                     }
+
+                    tempMenuMakanan.addAll(menuMakanan)
+                    tempMenuMinuman.addAll(menuMinuman)
                 }
             }
-            override fun onFailure(call: Call<com.malikrafsan.restaurant_mobile_app.dto.Menu>, t: Throwable) {
+
+            override fun onFailure(
+                call: Call<com.malikrafsan.restaurant_mobile_app.dto.Menu>,
+                t: Throwable
+            ) {
                 Toast.makeText(context, "${t.message}", Toast.LENGTH_SHORT).show()
             }
+
         })
     }
-
-    private fun loadFoodMenu() {
-        val menu = ApiBuilder.buildApi(MenuApi::class.java)
-        val requestCall = menu.getFoodMenu()
-
-        requestCall.enqueue(object : Callback<com.malikrafsan.restaurant_mobile_app.dto.Menu> {
-            override fun onResponse(call: Call<com.malikrafsan.restaurant_mobile_app.dto.Menu>, response: Response<com.malikrafsan.restaurant_mobile_app.dto.Menu>) {
-                if (response.isSuccessful) {
-                    val fetchedMenu: com.malikrafsan.restaurant_mobile_app.dto.Menu? = response.body()
-
-                    fetchedMenu?.data?.forEach{
-                        menuMakanan.add(MenuViewModel(it.name,it.currency, it.price, it.sold, it.description, it.type))
-                        tempMenuMakanan.add(MenuViewModel(it.name,it.currency, it.price, it.sold, it.description, it.type))
-                    }
-                }
-            }
-            override fun onFailure(call: Call<com.malikrafsan.restaurant_mobile_app.dto.Menu>, t: Throwable) {
-                Toast.makeText(context, "${t.message}", Toast.LENGTH_SHORT).show()
-            }
-        })
-    }
-
-    private fun loadDrinkMenu() {
-        val menu = ApiBuilder.buildApi(MenuApi::class.java)
-        val requestCall = menu.getDrinkMenu()
-
-        requestCall.enqueue(object : Callback<com.malikrafsan.restaurant_mobile_app.dto.Menu> {
-            override fun onResponse(call: Call<com.malikrafsan.restaurant_mobile_app.dto.Menu>, response: Response<com.malikrafsan.restaurant_mobile_app.dto.Menu>) {
-                if (response.isSuccessful) {
-                    val fetchedMenu: com.malikrafsan.restaurant_mobile_app.dto.Menu? = response.body()
-
-                    fetchedMenu?.data?.forEach{
-                        menuMinuman.add(MenuViewModel(it.name,it.currency, it.price, it.sold, it.description, it.type))
-                    }
-                }
-            }
-            override fun onFailure(call: Call<com.malikrafsan.restaurant_mobile_app.dto.Menu>, t: Throwable) {
-                Toast.makeText(context, "${t.message}", Toast.LENGTH_SHORT).show()
-            }
-        })
-    }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -161,7 +167,7 @@ class MenuFragment : Fragment() {
 
 
     override fun onDestroyView() {
-            super.onDestroyView()
-            _binding = null
-        }
+        super.onDestroyView()
+        _binding = null
+    }
 }
