@@ -15,9 +15,11 @@ import com.malikrafsan.restaurant_mobile_app.ui.keranjang.RestaurantViewModel
 import com.malikrafsan.restaurant_mobile_app.ui.menu.MenuViewModel
 
 
-class RestaurantAdapter (private val data: ArrayList<RestaurantViewModel>): RecyclerView.Adapter<RestaurantAdapter.ViewHolder>() {
+class RestaurantAdapter (private var data: ArrayList<RestaurantViewModel>): RecyclerView.Adapter<RestaurantAdapter.ViewHolder>() {
     // create new views
-
+    public fun setData(data: ArrayList<RestaurantViewModel>) {
+        this.data = data
+    }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(com.malikrafsan.restaurant_mobile_app.R.layout.fragment_daftar_restaurant, parent, false)
         return ViewHolder(itemView)
@@ -32,7 +34,7 @@ class RestaurantAdapter (private val data: ArrayList<RestaurantViewModel>): Recy
         holder.telpRestaurant.text = datum.telpRestaurant
         val context = holder.telpRestaurant.context
         holder.mapsButton.setOnClickListener {
-            val gmmIntentUri = Uri.parse("http://maps.google.com/maps?saddr=20.344,34.34&daddr=20.5666,45.345")
+            val gmmIntentUri = Uri.parse("http://maps.google.com/maps?saddr=" + datum.latitude.toBigDecimal().toPlainString() + "," + datum.latitude.toBigDecimal().toPlainString() + "&daddr=" + datum.longitude.toBigDecimal().toPlainString() + "," + datum.longitude.toBigDecimal().toPlainString())
             val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
             mapIntent.setPackage("com.google.android.apps.maps")
             context.startActivity(mapIntent)

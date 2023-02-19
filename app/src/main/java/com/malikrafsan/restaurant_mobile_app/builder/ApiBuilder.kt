@@ -5,7 +5,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object ApiBuilder {
-    private const val DEFAULT_URL = "http://192.168.18.232:9000/v1/"
+    private const val DEFAULT_URL = "http://192.168.1.85:8000/v1/"
     private val URL = System.getenv("BE_URL") ?: DEFAULT_URL
 
     private val okHttp = OkHttpClient.Builder()
