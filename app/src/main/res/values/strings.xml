@@ -18,4 +18,6 @@
     <string name="minus_sign">-</string>
     <string name="plus_sign">+</string>
     <string name="placeholder_search">Search...</string>
+    <string name="makanan">Makanan</string>
+    <string name="minuman">Minuman</string>
 </resources>
