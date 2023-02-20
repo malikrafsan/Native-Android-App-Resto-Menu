@@ -22,7 +22,32 @@ class MenuAdapter (private val listMenu: ArrayList<MenuViewModel>): RecyclerView
         holder.hargaMakanan.text = currentItem.currency + currentItem.price.toString()
         holder.terjualMakanan.text = currentItem.sold.toString() + " terjual"
         holder.deskripsiMakanan.text = currentItem.description
-        holder.totalPesanMakanan.text = "0"
+        holder.totalPesanMakanan.text = currentItem.buy.toString()
+
+        if (currentItem.buy == 0) {
+            holder.minusButton.visibility = View.INVISIBLE
+            holder.totalPesanMakanan.visibility = View.INVISIBLE
+        } else {
+            holder.minusButton.visibility = View.VISIBLE
+            holder.totalPesanMakanan.visibility = View.VISIBLE
+        }
+
+        holder.plusButton.setOnClickListener {
+            currentItem.buy = currentItem.buy + 1
+            holder.totalPesanMakanan.text = currentItem.buy.toString()
+            holder.minusButton.visibility = View.VISIBLE
+            holder.totalPesanMakanan.visibility = View.VISIBLE
+        }
+
+        holder.minusButton.setOnClickListener {
+            currentItem.buy = currentItem.buy - 1
+            holder.totalPesanMakanan.text = currentItem.buy.toString()
+
+            if (currentItem.buy == 0) {
+                holder.minusButton.visibility = View.INVISIBLE
+                holder.totalPesanMakanan.visibility = View.INVISIBLE
+            }
+        }
 
     }
 
