@@ -1,81 +1,90 @@
 package com.malikrafsan.restaurant_mobile_app.ui.menu
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
-import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.malikrafsan.restaurant_mobile_app.api.MenuApi
 import com.malikrafsan.restaurant_mobile_app.builder.ApiBuilder
-import com.malikrafsan.restaurant_mobile_app.ui.menu.MenuAdapter
+import com.malikrafsan.restaurant_mobile_app.databinding.FragmentMenuBinding
+import com.malikrafsan.restaurant_mobile_app.dto.MenuData
+import com.malikrafsan.restaurant_mobile_app.entity.Cart
 import com.malikrafsan.restaurant_mobile_app.ui.menu.MenuViewModel
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import kotlin.collections.ArrayList
 
 class MenuFragment : Fragment() {
 
-    private var _binding = null
+    private var _binding : FragmentMenuBinding? = null
+    private val binding get() = _binding!!
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
-    private lateinit var menuMakananRecyclerView: RecyclerView
-    private lateinit var menuMinumanRecyclerView: RecyclerView
+    private lateinit var makananRecyclerView: RecyclerView
+    private lateinit var minumanRecyclerView: RecyclerView
     private lateinit var searchView: SearchView
     private lateinit var makananAdapter: MenuAdapter
     private lateinit var minumanAdapter: MenuAdapter
     private lateinit var makananSection: LinearLayout
     private lateinit var minumanSection: LinearLayout
-    private val menuMakanan: ArrayList<MenuViewModel> = ArrayList()
-    private val tempMenuMakanan: ArrayList<MenuViewModel> = ArrayList()
-    private val menuMinuman: ArrayList<MenuViewModel> = ArrayList()
-    private val tempMenuMinuman: ArrayList<MenuViewModel> = ArrayList()
+
+    private val viewModel: MenuViewModel by viewModels()
+    private var menuMakanan = ArrayList<Cart>()
+    private var tempMenuMakanan: MutableList<Cart> = mutableListOf()
+    private var menuMinuman: MutableList<Cart> = mutableListOf()
+    private var tempMenuMinuman: MutableList<Cart> = mutableListOf()
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view: View = inflater!!.inflate(
-            com.malikrafsan.restaurant_mobile_app.R.layout.fragment_menu,
-            container,
-            false
-        )
+        this._binding = FragmentMenuBinding.inflate(inflater, container, false)
 
-        loadMenu()
-
-        return view
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        registerElmt()
+//        registerEvent()
 
-        menuMakananRecyclerView =
-            view.findViewById(com.malikrafsan.restaurant_mobile_app.R.id.menuMakananRecyclerView)
-        menuMakananRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+        loadMenu()
+//        viewModel.updateMenuMakanan(menuMakanan)
+//        Log.d("Menu", viewModel.menuMakanan.value.toString())
 
-        menuMinumanRecyclerView =
-            view.findViewById(com.malikrafsan.restaurant_mobile_app.R.id.menuMinumanRecyclerView)
-        menuMinumanRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+        makananRecyclerView.layoutManager = LinearLayoutManager(context)
+        minumanRecyclerView.layoutManager = LinearLayoutManager(context)
 
-//        tempMenuMinuman.clear()
+//        makananRecyclerView.adapter = MenuAdapter(requireContext(), menuMakanan, viewModel)
+//        minumanRecyclerView.adapter = MenuAdapter(requireContext(), menuMinuman, viewModel)
+        makananRecyclerView.adapter = MenuAdapter(requireContext(), menuMakanan)
+        minumanRecyclerView.adapter = MenuAdapter(requireContext(), menuMinuman)
 
-        makananAdapter = MenuAdapter(tempMenuMakanan)
-        menuMakananRecyclerView.adapter = makananAdapter
+    }
 
-        minumanAdapter = MenuAdapter(tempMenuMinuman)
-        menuMinumanRecyclerView.adapter = minumanAdapter
-
-        searchView = view.findViewById(com.malikrafsan.restaurant_mobile_app.R.id.searchView)
+    private fun registerElmt() {
+        makananRecyclerView = binding.menuMakananRecyclerView
+        minumanRecyclerView = binding.menuMinumanRecyclerView
+        searchView = binding.searchView
         searchView.clearFocus()
+    }
+
+    private fun registerEvent() {
         searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 hideSection()
@@ -97,28 +106,22 @@ class MenuFragment : Fragment() {
                             tempMenuMinuman.add((it))
                         }
                     }
-                    menuMakananRecyclerView.adapter!!.notifyDataSetChanged()
-                    menuMinumanRecyclerView.adapter!!.notifyDataSetChanged()
+                    makananRecyclerView.adapter!!.notifyDataSetChanged()
+                    minumanRecyclerView.adapter!!.notifyDataSetChanged()
                 } else {
                     tempMenuMakanan.clear()
                     tempMenuMakanan.addAll(menuMakanan)
-                    menuMakananRecyclerView.adapter!!.notifyDataSetChanged()
+                    makananRecyclerView.adapter!!.notifyDataSetChanged()
 
                     tempMenuMinuman.clear()
                     tempMenuMinuman.addAll(menuMinuman)
-                    menuMinumanRecyclerView.adapter!!.notifyDataSetChanged()
+                    minumanRecyclerView.adapter!!.notifyDataSetChanged()
                 }
 
                 hideSection()
                 return true
             }
         })
-
-        makananSection = view.findViewById(com.malikrafsan.restaurant_mobile_app.R.id.makananSection)
-        minumanSection = view.findViewById(com.malikrafsan.restaurant_mobile_app.R.id.minumanSection)
-
-        hideSection()
-
     }
 
     private fun hideSection() {
@@ -150,29 +153,9 @@ class MenuFragment : Fragment() {
 
                     fetchedMenuMakanan?.data?.forEach {
                         if (it.type == "Food") {
-                            menuMakanan.add(
-                                MenuViewModel(
-                                    it.name,
-                                    it.currency,
-                                    it.price,
-                                    it.sold,
-                                    it.description,
-                                    it.type,
-                                    0
-                                )
-                            )
+                            menuMakanan.add(Cart.fromMenu(it))
                         } else {
-                            menuMinuman.add(
-                                MenuViewModel(
-                                    it.name,
-                                    it.currency,
-                                    it.price,
-                                    it.sold,
-                                    it.description,
-                                    it.type,
-                                    0
-                                )
-                            )
+                            menuMinuman.add(Cart.fromMenu(it))
                         }
                     }
 

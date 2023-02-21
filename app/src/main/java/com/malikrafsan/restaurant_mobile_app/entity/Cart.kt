@@ -30,7 +30,7 @@ data class Cart(
                 price = menu.price,
                 sold = menu.sold,
                 type = menu.type,
-                qty = 1,
+                qty = 0,
             )
         }
     }

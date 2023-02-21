@@ -11,6 +11,10 @@ class CartRepositoryImpl(
         return dao.getAll()
     }
 
+    override suspend fun update(cart: Cart) {
+        dao.update(cart)
+    }
+
     override suspend fun insert(cart: Cart) {
         dao.insert(cart)
     }
