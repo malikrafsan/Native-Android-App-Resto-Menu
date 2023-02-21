@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
@@ -30,6 +32,8 @@ class MenuFragment : Fragment() {
     private lateinit var searchView: SearchView
     private lateinit var makananAdapter: MenuAdapter
     private lateinit var minumanAdapter: MenuAdapter
+    private lateinit var makananSection: LinearLayout
+    private lateinit var minumanSection: LinearLayout
     private val menuMakanan: ArrayList<MenuViewModel> = ArrayList()
     private val tempMenuMakanan: ArrayList<MenuViewModel> = ArrayList()
     private val menuMinuman: ArrayList<MenuViewModel> = ArrayList()
@@ -62,6 +66,8 @@ class MenuFragment : Fragment() {
             view.findViewById(com.malikrafsan.restaurant_mobile_app.R.id.menuMinumanRecyclerView)
         menuMinumanRecyclerView.layoutManager = LinearLayoutManager(requireContext())
 
+//        tempMenuMinuman.clear()
+
         makananAdapter = MenuAdapter(tempMenuMakanan)
         menuMakananRecyclerView.adapter = makananAdapter
 
@@ -72,7 +78,8 @@ class MenuFragment : Fragment() {
         searchView.clearFocus()
         searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                return true
+                hideSection()
+                return false
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
@@ -102,9 +109,30 @@ class MenuFragment : Fragment() {
                     menuMinumanRecyclerView.adapter!!.notifyDataSetChanged()
                 }
 
+                hideSection()
                 return true
             }
         })
+
+        makananSection = view.findViewById(com.malikrafsan.restaurant_mobile_app.R.id.makananSection)
+        minumanSection = view.findViewById(com.malikrafsan.restaurant_mobile_app.R.id.minumanSection)
+
+        hideSection()
+
+    }
+
+    private fun hideSection() {
+        if (tempMenuMakanan.size == 0) {
+            makananSection.visibility = View.GONE
+        } else {
+            makananSection.visibility = View.VISIBLE
+        }
+
+        if (tempMenuMinuman.size == 0) {
+            minumanSection.visibility = View.GONE
+        } else {
+            minumanSection.visibility = View.VISIBLE
+        }
     }
 
     private fun loadMenu() {
@@ -129,7 +157,8 @@ class MenuFragment : Fragment() {
                                     it.price,
                                     it.sold,
                                     it.description,
-                                    it.type
+                                    it.type,
+                                    0
                                 )
                             )
                         } else {
@@ -140,7 +169,8 @@ class MenuFragment : Fragment() {
                                     it.price,
                                     it.sold,
                                     it.description,
-                                    it.type
+                                    it.type,
+                                    0
                                 )
                             )
                         }

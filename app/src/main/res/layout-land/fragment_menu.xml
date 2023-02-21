@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:layout_marginBottom="60dp"
     tools:context=".ui.menu.MenuFragment">
 
     <LinearLayout
@@ -35,33 +36,49 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <TextView
+                <LinearLayout
+                    android:id="@+id/makananSection"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginHorizontal="12dp"
-                    android:text="@string/makanan" />
+                    android:orientation="vertical">
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/menuMakananRecyclerView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    tools:itemCount="3"
-                    tools:listitem="@layout/list_makanan" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginHorizontal="12dp"
+                        android:text="@string/makanan" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginHorizontal="12dp"
-                    android:text="@string/minuman" />
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/menuMakananRecyclerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        tools:itemCount="3"
+                        tools:listitem="@layout/list_makanan" />
+                </LinearLayout>
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/menuMinumanRecyclerView"
+                <LinearLayout
+                    android:id="@+id/minumanSection"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    tools:itemCount="3"
-                    tools:listitem="@layout/list_makanan" />
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginHorizontal="12dp"
+                        android:text="@string/minuman" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/menuMinumanRecyclerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        tools:itemCount="3"
+                        tools:listitem="@layout/list_makanan" />
+                </LinearLayout>
+
+
             </LinearLayout>
         </ScrollView>
 
