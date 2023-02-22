@@ -11,7 +11,6 @@ import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,123 +18,133 @@ import androidx.recyclerview.widget.RecyclerView
 import com.malikrafsan.restaurant_mobile_app.api.MenuApi
 import com.malikrafsan.restaurant_mobile_app.builder.ApiBuilder
 import com.malikrafsan.restaurant_mobile_app.databinding.FragmentMenuBinding
-import com.malikrafsan.restaurant_mobile_app.dto.MenuData
 import com.malikrafsan.restaurant_mobile_app.entity.Cart
-import com.malikrafsan.restaurant_mobile_app.ui.menu.MenuViewModel
-import kotlinx.coroutines.flow.collect
+import com.malikrafsan.restaurant_mobile_app.ui.keranjang.CartViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+@AndroidEntryPoint
 class MenuFragment : Fragment() {
 
     private var _binding : FragmentMenuBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var makananRecyclerView: RecyclerView
-    private lateinit var minumanRecyclerView: RecyclerView
+    private lateinit var menuMakananRecyclerView: RecyclerView
+    private lateinit var menuMinumanRecyclerView: RecyclerView
     private lateinit var searchView: SearchView
     private lateinit var makananAdapter: MenuAdapter
     private lateinit var minumanAdapter: MenuAdapter
     private lateinit var makananSection: LinearLayout
     private lateinit var minumanSection: LinearLayout
+    private val menuMakanan: ArrayList<Cart> = ArrayList()
+    private val tempMenuMakanan: ArrayList<Cart> = ArrayList()
+    private val menuMinuman: ArrayList<Cart> = ArrayList()
+    private val tempMenuMinuman: ArrayList<Cart> = ArrayList()
 
-    private val viewModel: MenuViewModel by viewModels()
-    private var menuMakanan = ArrayList<Cart>()
-    private var tempMenuMakanan: MutableList<Cart> = mutableListOf()
-    private var menuMinuman: MutableList<Cart> = mutableListOf()
-    private var tempMenuMinuman: MutableList<Cart> = mutableListOf()
-
+    private val viewModel: CartViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        this._binding = FragmentMenuBinding.inflate(inflater, container, false)
-
+        this._binding = FragmentMenuBinding.inflate(
+            inflater,
+            container,
+            false
+        )
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         registerElmt()
-//        registerEvent()
 
+        Log.d("MenuFragment", "Load menu from database")
         loadMenu()
-//        viewModel.updateMenuMakanan(menuMakanan)
-//        Log.d("Menu", viewModel.menuMakanan.value.toString())
 
-        makananRecyclerView.layoutManager = LinearLayoutManager(context)
-        minumanRecyclerView.layoutManager = LinearLayoutManager(context)
+        menuMakananRecyclerView.adapter = MenuAdapter(
+            requireContext(),
+            tempMenuMakanan,
+            viewModel
+        )
 
-//        makananRecyclerView.adapter = MenuAdapter(requireContext(), menuMakanan, viewModel)
-//        minumanRecyclerView.adapter = MenuAdapter(requireContext(), menuMinuman, viewModel)
-        makananRecyclerView.adapter = MenuAdapter(requireContext(), menuMakanan)
-        minumanRecyclerView.adapter = MenuAdapter(requireContext(), menuMinuman)
+        menuMinumanRecyclerView.adapter = MenuAdapter(
+            requireContext(),
+            tempMenuMinuman,
+            viewModel
+        )
 
+        Log.d("MenuFragment", "Coroutine start")
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
+                viewModel.carts.collect {
+                    syncMenu(it)
+                }
+            }
+        }
+    }
+
+    private suspend fun syncMenu(listCart: List<Cart>) {
+        var found: Boolean = false
+        menuMakanan.forEach {currentMenu ->
+            found = false
+            listCart.forEach {currentCart ->
+                if (currentMenu.id == currentCart.id) {
+                    found = true
+                    currentMenu.qty = currentCart.qty
+                }
+            }
+            if (!found) {
+                currentMenu.qty = 0
+            }
+        }
+
+        menuMinuman.forEach {currentMenu ->
+            found = false
+            listCart.forEach {currentCart ->
+                if (currentMenu.id == currentCart.id) {
+                    found = true
+                    currentMenu.qty = currentCart.qty
+                }
+            }
+            if (!found) {
+                currentMenu.qty = 0
+            }
+        }
+
+
+        listCart.forEach {currentCart ->
+            if (!menuMakanan.contains(currentCart) and !menuMinuman.contains(currentCart)) {
+                viewModel.deleteCart(currentCart)
+            }
+        }
+
+        notifyDataChanged()
+    }
+
+    private fun notifyDataChanged() {
+        tempMenuMakanan.clear()
+        tempMenuMakanan.addAll(menuMakanan)
+        menuMakananRecyclerView.adapter!!.notifyDataSetChanged()
+
+        tempMenuMinuman.clear()
+        tempMenuMinuman.addAll(menuMinuman)
+        menuMinumanRecyclerView.adapter!!.notifyDataSetChanged()
     }
 
     private fun registerElmt() {
-        makananRecyclerView = binding.menuMakananRecyclerView
-        minumanRecyclerView = binding.menuMinumanRecyclerView
+        menuMakananRecyclerView = binding.menuMakananRecyclerView
+        menuMinumanRecyclerView = binding.menuMinumanRecyclerView
         searchView = binding.searchView
         searchView.clearFocus()
-    }
 
-    private fun registerEvent() {
-        searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                hideSection()
-                return false
-            }
+        menuMakananRecyclerView.layoutManager = LinearLayoutManager(context)
 
-            override fun onQueryTextChange(newText: String?): Boolean {
-                val searchText = newText!!.lowercase()
-                if (searchText.isNotEmpty()) {
-                    tempMenuMakanan.clear()
-                    tempMenuMinuman.clear()
-                    menuMakanan.forEach {
-                        if (it.name.lowercase().contains(searchText)) {
-                            tempMenuMakanan.add((it))
-                        }
-                    }
-                    menuMinuman.forEach {
-                        if (it.name.lowercase().contains(searchText)) {
-                            tempMenuMinuman.add((it))
-                        }
-                    }
-                    makananRecyclerView.adapter!!.notifyDataSetChanged()
-                    minumanRecyclerView.adapter!!.notifyDataSetChanged()
-                } else {
-                    tempMenuMakanan.clear()
-                    tempMenuMakanan.addAll(menuMakanan)
-                    makananRecyclerView.adapter!!.notifyDataSetChanged()
-
-                    tempMenuMinuman.clear()
-                    tempMenuMinuman.addAll(menuMinuman)
-                    minumanRecyclerView.adapter!!.notifyDataSetChanged()
-                }
-
-                hideSection()
-                return true
-            }
-        })
-    }
-
-    private fun hideSection() {
-        if (tempMenuMakanan.size == 0) {
-            makananSection.visibility = View.GONE
-        } else {
-            makananSection.visibility = View.VISIBLE
-        }
-
-        if (tempMenuMinuman.size == 0) {
-            minumanSection.visibility = View.GONE
-        } else {
-            minumanSection.visibility = View.VISIBLE
-        }
+        menuMinumanRecyclerView.layoutManager = LinearLayoutManager(context)
     }
 
     private fun loadMenu() {
