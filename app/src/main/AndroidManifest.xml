@@ -32,7 +32,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ScanPaymentActivity"
+            android:name=".ui.scan_payment.ScanPaymentActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"

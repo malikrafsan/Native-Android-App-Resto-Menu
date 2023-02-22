@@ -1,10 +1,13 @@
-package com.malikrafsan.restaurant_mobile_app
+package com.malikrafsan.restaurant_mobile_app.ui.scan_payment
 
 import android.Manifest.permission.CAMERA
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -14,19 +17,32 @@ import com.budiyev.android.codescanner.CodeScannerView
 import com.budiyev.android.codescanner.DecodeCallback
 import com.budiyev.android.codescanner.ErrorCallback
 import com.budiyev.android.codescanner.ScanMode
+import com.malikrafsan.restaurant_mobile_app.R
 import com.malikrafsan.restaurant_mobile_app.api.Payment
 import com.malikrafsan.restaurant_mobile_app.builder.ApiBuilder
+import com.malikrafsan.restaurant_mobile_app.databinding.ActivityScanPaymentBinding
 import com.malikrafsan.restaurant_mobile_app.dto.PayResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class ScanPaymentActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityScanPaymentBinding
     private lateinit var codeScanner: CodeScanner
+    private lateinit var scanStatusLayout: LinearLayout
+    private lateinit var imageViewStatusIcon: ImageView
+    private lateinit var textViewStatus: TextView
+    private lateinit var textViewDescription: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_scan_payment)
+        binding = ActivityScanPaymentBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        scanStatusLayout = findViewById(R.id.scanStatusLayout)
+        imageViewStatusIcon = findViewById(R.id.imageViewStatusIcon)
+        textViewStatus = findViewById(R.id.textViewStatus)
+        textViewDescription = findViewById(R.id.textViewDescription)
 
         if (ContextCompat.checkSelfPermission(this, CAMERA) == PackageManager.PERMISSION_DENIED) {
             ActivityCompat.requestPermissions(this, arrayOf(CAMERA), 123)
@@ -61,6 +77,7 @@ class ScanPaymentActivity : AppCompatActivity() {
         }
 
         scannerView.setOnClickListener {
+            hideStatus()
             codeScanner.startPreview()
         }
     }
@@ -74,18 +91,37 @@ class ScanPaymentActivity : AppCompatActivity() {
                 if (response.isSuccessful) {
                     response.body()?.let {
                         Log.d("PAYMENT", it.toString())
-                        Toast.makeText(this@ScanPaymentActivity, "Payment Successful", Toast.LENGTH_SHORT).show()
+                        displayStatus(true, "Berhasil", "Sudah dibayar")
                     }
                 } else {
                     Log.d("PAYMENT", "UNSUCCESSFUL: " + response.errorBody().toString())
-                    Toast.makeText(this@ScanPaymentActivity, "Payment Failed", Toast.LENGTH_SHORT).show()
+                    displayStatus(false, "Gagal", "Belum dibayar")
                 }
             }
             override fun onFailure(call: Call<PayResponse>, t: Throwable) {
-                Toast.makeText(this@ScanPaymentActivity, "${t.message}", Toast.LENGTH_SHORT).show()
                 Log.d("PAYMENT", "FAILED: " + t.message.toString())
+                displayStatus(false, "Gagal", "Belum dibayar")
             }
         })
+    }
+
+    private fun displayStatus(isSuccess: Boolean, statusMsg: String, statusDesc: String) {
+        this.scanStatusLayout.visibility = LinearLayout.VISIBLE
+        if (isSuccess) {
+            this.imageViewStatusIcon.setImageResource(R.drawable.ok)
+        } else {
+            this.imageViewStatusIcon.setImageResource(R.drawable.cancel)
+        }
+
+        this.textViewStatus.text = statusMsg
+        this.textViewDescription.text = statusDesc
+    }
+
+    private fun hideStatus() {
+        this.scanStatusLayout.visibility = LinearLayout.GONE
+        this.imageViewStatusIcon.setImageResource(0)
+        this.textViewStatus.text = ""
+        this.textViewDescription.text = ""
     }
 
     override fun onRequestPermissionsResult(

@@ -15,12 +15,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.malikrafsan.restaurant_mobile_app.ScanPaymentActivity
+import com.malikrafsan.restaurant_mobile_app.ui.scan_payment.ScanPaymentActivity
 import com.malikrafsan.restaurant_mobile_app.databinding.FragmentKeranjangBinding
-import com.malikrafsan.restaurant_mobile_app.dto.Menu
-import com.malikrafsan.restaurant_mobile_app.dto.MenuData
 import com.malikrafsan.restaurant_mobile_app.entity.Cart
-import com.malikrafsan.restaurant_mobile_app.event.CartEvent
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kotlin.random.Random
