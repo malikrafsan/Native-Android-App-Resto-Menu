@@ -1,13 +1,21 @@
 package com.malikrafsan.restaurant_mobile_app.ui.menu
 
+import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.core.content.res.TypedArrayUtils.getString
 import androidx.recyclerview.widget.RecyclerView
+import com.malikrafsan.restaurant_mobile_app.entity.Cart
+import com.malikrafsan.restaurant_mobile_app.event.CartEvent
+import com.malikrafsan.restaurant_mobile_app.ui.keranjang.CartViewModel
 
-class MenuAdapter (private val listMenu: ArrayList<MenuViewModel>): RecyclerView.Adapter<MenuAdapter.Holder>() {
+class MenuAdapter (
+    private val ctx: Context,
+    private val listMenu: List<Cart>,
+    private val viewModel: CartViewModel
+): RecyclerView.Adapter<MenuAdapter.Holder>() {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
@@ -16,15 +24,15 @@ class MenuAdapter (private val listMenu: ArrayList<MenuViewModel>): RecyclerView
     }
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
-        val currentItem = listMenu[position]
+        val currentItem = this.listMenu[position]
         holder.namaMakanan.text = currentItem.name
 //        holder.hargaMakanan.text = currentItem.currency + currentItem.price.toString()
         holder.hargaMakanan.text = currentItem.currency + currentItem.price.toString()
         holder.terjualMakanan.text = currentItem.sold.toString() + " terjual"
         holder.deskripsiMakanan.text = currentItem.description
-        holder.totalPesanMakanan.text = currentItem.buy.toString()
+        holder.totalPesanMakanan.text = currentItem.qty.toString()
 
-        if (currentItem.buy == 0) {
+        if (currentItem.qty == 0) {
             holder.minusButton.visibility = View.INVISIBLE
             holder.totalPesanMakanan.visibility = View.INVISIBLE
         } else {
@@ -33,17 +41,21 @@ class MenuAdapter (private val listMenu: ArrayList<MenuViewModel>): RecyclerView
         }
 
         holder.plusButton.setOnClickListener {
-            currentItem.buy = currentItem.buy + 1
-            holder.totalPesanMakanan.text = currentItem.buy.toString()
-            holder.minusButton.visibility = View.VISIBLE
-            holder.totalPesanMakanan.visibility = View.VISIBLE
+            if (currentItem.qty == 0){
+                viewModel.onEvent(CartEvent.onAddClick(currentItem))
+                holder.minusButton.visibility = View.VISIBLE
+                holder.totalPesanMakanan.visibility = View.VISIBLE
+            } else {
+                viewModel.onEvent(CartEvent.ChangeQty(currentItem, currentItem.qty + 1))
+            }
+            currentItem.qty++
         }
 
         holder.minusButton.setOnClickListener {
-            currentItem.buy = currentItem.buy - 1
-            holder.totalPesanMakanan.text = currentItem.buy.toString()
+            viewModel.onEvent(CartEvent.ChangeQty(currentItem, currentItem.qty - 1))
+            currentItem.qty--
 
-            if (currentItem.buy == 0) {
+            if (currentItem.qty == 0) {
                 holder.minusButton.visibility = View.INVISIBLE
                 holder.totalPesanMakanan.visibility = View.INVISIBLE
             }
@@ -52,7 +64,7 @@ class MenuAdapter (private val listMenu: ArrayList<MenuViewModel>): RecyclerView
     }
 
     override fun getItemCount(): Int {
-        return listMenu.size
+        return this.listMenu.size
     }
 
     class Holder(itemView: View): RecyclerView.ViewHolder(itemView) {

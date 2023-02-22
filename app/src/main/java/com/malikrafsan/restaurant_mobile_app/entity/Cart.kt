@@ -14,7 +14,7 @@ data class Cart(
     val price: Int,
     val sold: Int,
     val type: String,
-    val qty: Int,
+    var qty: Int,
 ) {
     companion object {
         private fun createId(menu: MenuData): String {
@@ -30,7 +30,7 @@ data class Cart(
                 price = menu.price,
                 sold = menu.sold,
                 type = menu.type,
-                qty = 1,
+                qty = 0,
             )
         }
     }
