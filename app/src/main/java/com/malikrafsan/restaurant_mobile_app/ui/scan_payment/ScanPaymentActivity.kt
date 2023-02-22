@@ -9,8 +9,13 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.budiyev.android.codescanner.AutoFocusMode
 import com.budiyev.android.codescanner.CodeScanner
 import com.budiyev.android.codescanner.CodeScannerView
@@ -22,33 +27,60 @@ import com.malikrafsan.restaurant_mobile_app.api.Payment
 import com.malikrafsan.restaurant_mobile_app.builder.ApiBuilder
 import com.malikrafsan.restaurant_mobile_app.databinding.ActivityScanPaymentBinding
 import com.malikrafsan.restaurant_mobile_app.dto.PayResponse
+import com.malikrafsan.restaurant_mobile_app.entity.Cart
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import kotlin.random.Random
 
+@AndroidEntryPoint
 class ScanPaymentActivity : AppCompatActivity() {
     private lateinit var binding: ActivityScanPaymentBinding
     private lateinit var codeScanner: CodeScanner
     private lateinit var scanStatusLayout: LinearLayout
+    private lateinit var totalPriceTextView: TextView
     private lateinit var imageViewStatusIcon: ImageView
     private lateinit var textViewStatus: TextView
     private lateinit var textViewDescription: TextView
+    private lateinit var viewModel: ScanPaymentViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityScanPaymentBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        viewModel = ViewModelProvider(this).get(ScanPaymentViewModel::class.java)
+
         scanStatusLayout = findViewById(R.id.scanStatusLayout)
+        totalPriceTextView = findViewById(R.id.totalPriceTextView)
         imageViewStatusIcon = findViewById(R.id.imageViewStatusIcon)
         textViewStatus = findViewById(R.id.textViewStatus)
         textViewDescription = findViewById(R.id.textViewDescription)
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.CREATED) {
+                viewModel.carts.collect {
+                    calculateTotalPrice(it)
+                }
+            }
+        }
 
         if (ContextCompat.checkSelfPermission(this, CAMERA) == PackageManager.PERMISSION_DENIED) {
             ActivityCompat.requestPermissions(this, arrayOf(CAMERA), 123)
         } else {
             startScanning()
         }
+    }
+
+    private fun calculateTotalPrice(carts: List<Cart>) {
+        var total = 0
+        for (cart in carts) {
+            total += cart.qty * cart.price
+        }
+        this.totalPriceTextView.text = "Rp. $total"
     }
 
     private fun startScanning() {
@@ -88,10 +120,24 @@ class ScanPaymentActivity : AppCompatActivity() {
 
         requestCall.enqueue(object : Callback<PayResponse> {
             override fun onResponse(call: Call<PayResponse>, response: Response<PayResponse>) {
+                Log.d("PAYMENT", "ON RESPONSE ${response.body()}")
+
                 if (response.isSuccessful) {
                     response.body()?.let {
+                        if (it.status == "FAILED") {
+                            Log.d("PAYMENT", "FAILED: $it")
+                            Log.d("PAYMENT", it.toString())
+                            displayStatus(false, "Gagal", "Belum dibayar")
+                            return
+                        }
+
+                        Log.d("PAYMENT", "SUCCESSFUL: $it")
                         Log.d("PAYMENT", it.toString())
                         displayStatus(true, "Berhasil", "Sudah dibayar")
+
+                        lifecycleScope.launch {
+                            viewModel.clearCart()
+                        }
                     }
                 } else {
                     Log.d("PAYMENT", "UNSUCCESSFUL: " + response.errorBody().toString())

@@ -22,4 +22,8 @@ class CartRepositoryImpl(
     override suspend fun delete(cart: Cart) {
         dao.delete(cart)
     }
+
+    override suspend fun deleteAll() {
+        dao.deleteAll()
+    }
 }
