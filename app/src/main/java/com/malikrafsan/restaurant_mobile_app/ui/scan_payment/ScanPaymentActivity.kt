@@ -96,7 +96,7 @@ class ScanPaymentActivity : AppCompatActivity() {
 
         codeScanner.decodeCallback = DecodeCallback {
             runOnUiThread {
-                Toast.makeText(this, "Scan result: ${it.text} -> Paying", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Paying", Toast.LENGTH_LONG).show()
                 pay(it.text)
             }
         }
