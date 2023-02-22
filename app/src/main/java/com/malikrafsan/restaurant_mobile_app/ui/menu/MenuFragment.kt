@@ -39,10 +39,10 @@ class MenuFragment : Fragment() {
     private lateinit var minumanAdapter: MenuAdapter
     private lateinit var makananSection: LinearLayout
     private lateinit var minumanSection: LinearLayout
-    private val menuMakanan: ArrayList<Cart> = ArrayList()
-    private val tempMenuMakanan: ArrayList<Cart> = ArrayList()
-    private val menuMinuman: ArrayList<Cart> = ArrayList()
-    private val tempMenuMinuman: ArrayList<Cart> = ArrayList()
+    private val menuMakanan: MutableList<Cart> = mutableListOf()
+    private val tempMenuMakanan: MutableList<Cart> = mutableListOf()
+    private val menuMinuman: MutableList<Cart> = mutableListOf()
+    private val tempMenuMinuman: MutableList<Cart> = mutableListOf()
 
     private val viewModel: CartViewModel by viewModels()
 
@@ -62,6 +62,7 @@ class MenuFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         registerElmt()
+        registerEvent()
 
         Log.d("MenuFragment", "Load menu from database")
         loadMenu()
@@ -85,6 +86,56 @@ class MenuFragment : Fragment() {
                     syncMenu(it)
                 }
             }
+        }
+    }
+
+    private fun registerEvent() {
+        searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                Log.d("Search", "Enter $query")
+                hideSection()
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                Log.d("Search", "Type $newText")
+                val searchText: String = newText!!.lowercase()
+
+                if (searchText.isNotEmpty()) {
+                    tempMenuMakanan.clear()
+                    tempMenuMinuman.clear()
+
+                    menuMakanan.forEach { currentMenu ->
+                        if (currentMenu.name.lowercase().contains(searchText)) tempMenuMakanan.add(currentMenu)
+                    }
+
+                    menuMinuman.forEach { currentMenu ->
+                        if (currentMenu.name.lowercase().contains(searchText)) tempMenuMinuman.add(currentMenu)
+                    }
+
+                    menuMakananRecyclerView.adapter!!.notifyDataSetChanged()
+                    menuMinumanRecyclerView.adapter!!.notifyDataSetChanged()
+                } else {
+                    notifyDataChanged()
+                }
+
+                hideSection()
+                return true
+            }
+        })
+    }
+
+    private fun hideSection() {
+        if (tempMenuMakanan.size == 0) {
+            makananSection.visibility = View.GONE
+        } else {
+            makananSection.visibility = View.VISIBLE
+        }
+
+        if (tempMenuMinuman.size == 0) {
+            minumanSection.visibility = View.GONE
+        } else {
+            minumanSection.visibility = View.VISIBLE
         }
     }
 
@@ -143,8 +194,10 @@ class MenuFragment : Fragment() {
         searchView.clearFocus()
 
         menuMakananRecyclerView.layoutManager = LinearLayoutManager(context)
-
         menuMinumanRecyclerView.layoutManager = LinearLayoutManager(context)
+
+        makananSection = binding.makananSection
+        minumanSection = binding.minumanSection
     }
 
     private fun loadMenu() {
