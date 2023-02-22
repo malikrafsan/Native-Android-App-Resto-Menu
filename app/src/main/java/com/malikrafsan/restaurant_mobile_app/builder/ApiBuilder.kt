@@ -1,11 +1,12 @@
 package com.malikrafsan.restaurant_mobile_app.builder
 
+import com.malikrafsan.restaurant_mobile_app.config.InternetConfig
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object ApiBuilder {
-    private const val DEFAULT_URL = "http://192.168.1.85:8000/v1/"
+    private const val DEFAULT_URL = InternetConfig.BASE_URL
     private val URL = System.getenv("BE_URL") ?: DEFAULT_URL
 
     private val okHttp = OkHttpClient.Builder()
