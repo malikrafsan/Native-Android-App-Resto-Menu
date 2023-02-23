@@ -87,7 +87,7 @@ class ScanPaymentActivity : AppCompatActivity() {
         for (cart in carts) {
             total += cart.qty * cart.price
         }
-        this.totalPriceTextView.text = "Rp. $total"
+        this.totalPriceTextView.text = getString(R.string.hargaMakanan, "IDR", total.toString().reversed().chunked(3).joinToString(".").reversed())
     }
 
     private fun startScanning() {
