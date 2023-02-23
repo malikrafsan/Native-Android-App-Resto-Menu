@@ -1,18 +1,15 @@
 package com.malikrafsan.restaurant_mobile_app.ui.restaurant
 
 import android.content.Intent
-import android.util.Log
+import android.net.Uri
 import android.view.LayoutInflater
-import android.content.Context
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.core.content.ContextCompat.startActivity
-import android.net.Uri
 import androidx.recyclerview.widget.RecyclerView
 import com.malikrafsan.restaurant_mobile_app.ui.keranjang.RestaurantViewModel
-import com.malikrafsan.restaurant_mobile_app.ui.menu.MenuViewModel
 
 
 class RestaurantAdapter (private var data: ArrayList<RestaurantViewModel>): RecyclerView.Adapter<RestaurantAdapter.ViewHolder>() {
@@ -34,10 +31,14 @@ class RestaurantAdapter (private var data: ArrayList<RestaurantViewModel>): Recy
         holder.telpRestaurant.text = datum.telpRestaurant
         val context = holder.telpRestaurant.context
         holder.mapsButton.setOnClickListener {
-            val gmmIntentUri = Uri.parse("http://maps.google.com/maps?saddr=" + datum.latitude.toBigDecimal().toPlainString() + "," + datum.latitude.toBigDecimal().toPlainString() + "&daddr=" + datum.longitude.toBigDecimal().toPlainString() + "," + datum.longitude.toBigDecimal().toPlainString())
+            val gmmIntentUri = Uri.parse("geo:0,0?q=" + datum.latitude.toBigDecimal().toPlainString() + "," + datum.longitude.toBigDecimal().toPlainString() + "(" + datum.namaRestaurant +")")
             val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
             mapIntent.setPackage("com.google.android.apps.maps")
             context.startActivity(mapIntent)
+            // val gmmIntentUri = Uri.parse("http://maps.google.com/maps?saddr=" + datum.latitude.toBigDecimal().toPlainString() + "," + datum.longitude.toBigDecimal().toPlainString())
+            //val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
+            //mapIntent.setPackage("com.google.android.apps.maps")
+            //context.startActivity(mapIntent)
         }
 
     }
