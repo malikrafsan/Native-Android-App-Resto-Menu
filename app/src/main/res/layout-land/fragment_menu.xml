@@ -24,7 +24,8 @@
             app:queryHint="@string/placeholder_search"
             app:defaultQueryHint="@string/placeholder_search"
             android:layout_weight="0.1"
-            android:background="@drawable/searchbar_bg" />
+            android:background="@drawable/searchbar_bg"
+            app:iconifiedByDefault="false"/>
 
         <ScrollView
             android:layout_width="0dp"
