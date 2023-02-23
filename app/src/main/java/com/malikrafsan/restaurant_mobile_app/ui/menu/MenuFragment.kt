@@ -93,7 +93,6 @@ class MenuFragment : Fragment() {
         searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 Log.d("Search", "Enter $query")
-                hideSection()
                 return true
             }
 
@@ -119,24 +118,9 @@ class MenuFragment : Fragment() {
                     notifyDataChanged()
                 }
 
-                hideSection()
                 return true
             }
         })
-    }
-
-    private fun hideSection() {
-        if (tempMenuMakanan.size == 0) {
-            makananSection.visibility = View.GONE
-        } else {
-            makananSection.visibility = View.VISIBLE
-        }
-
-        if (tempMenuMinuman.size == 0) {
-            minumanSection.visibility = View.GONE
-        } else {
-            minumanSection.visibility = View.VISIBLE
-        }
     }
 
     private suspend fun syncMenu(listCart: List<Cart>) {
