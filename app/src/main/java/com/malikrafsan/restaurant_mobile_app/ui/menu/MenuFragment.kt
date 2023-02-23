@@ -123,6 +123,11 @@ class MenuFragment : Fragment() {
     }
 
     private suspend fun syncMenu(listCart: List<Cart>) {
+        Log.d("MenuFragment", "Sync menu from database")
+        for (cart in listCart) {
+            Log.d("MenuFragment", "Cart: ${cart.id} ${cart.name} ${cart.qty} ${cart.price} ${cart.type}")
+        }
+
         var found: Boolean = false
         menuMakanan.forEach {currentMenu ->
             found = false
@@ -150,10 +155,12 @@ class MenuFragment : Fragment() {
             }
         }
 
-
-        listCart.forEach {currentCart ->
-            if (!menuMakanan.contains(currentCart) and !menuMinuman.contains(currentCart)) {
-                viewModel.deleteCart(currentCart)
+        Log.d("MenuFragment", "menu makanan size ${menuMakanan.size}, menu minuman size ${menuMinuman.size}")
+        if (menuMakanan.size != 0 && menuMinuman.size != 0) {
+            listCart.forEach {currentCart ->
+                if (!menuMakanan.contains(currentCart) and !menuMinuman.contains(currentCart)) {
+                    viewModel.deleteCart(currentCart)
+                }
             }
         }
 
@@ -208,6 +215,12 @@ class MenuFragment : Fragment() {
 
                     tempMenuMakanan.addAll(menuMakanan)
                     tempMenuMinuman.addAll(menuMinuman)
+
+                    viewLifecycleOwner.lifecycleScope.launch {
+                        viewModel.carts.collect {
+                            syncMenu(it)
+                        }
+                    }
 
                     menuMakananRecyclerView.adapter!!.notifyDataSetChanged()
                     menuMinumanRecyclerView.adapter!!.notifyDataSetChanged()
