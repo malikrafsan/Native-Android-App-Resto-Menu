@@ -72,12 +72,13 @@
                     >
                     <Button
                         android:id="@+id/minusQtyButton"
-                        android:layout_width="40dp"
+                        android:layout_width="50dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:textSize="20dp"
                         android:padding="0dp"
                         android:text="-"
+                        android:textStyle="bold"
                         android:textColor="@color/secondary"
                         android:backgroundTint="@color/primary" />
                     <TextView
@@ -92,11 +93,12 @@
 
                     <Button
                         android:id="@+id/plusQtyButton"
-                        android:layout_width="40dp"
+                        android:layout_width="50dp"
                         android:textSize="20dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="+"
+                        android:textStyle="bold"
                         android:textColor="@color/secondary"
                         android:backgroundTint="@color/primary"/>
 

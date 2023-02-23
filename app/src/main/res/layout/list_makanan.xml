@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
-        app:cardBackgroundColor="@color/teal_700"
+        app:cardBackgroundColor="@color/secondary"
         app:cardCornerRadius="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -71,7 +71,7 @@
                 android:layout_marginVertical="8dp"
                 android:layout_marginEnd="12dp"
                 android:layout_weight="1"
-                android:gravity="center_vertical"
+                android:gravity="end|center_vertical"
                 android:orientation="horizontal"
                 android:weightSum="3">
 
@@ -80,7 +80,11 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/minus_sign" />
+                    android:text="@string/minus_sign"
+                    android:textSize="20dp"
+                    android:textStyle="bold"
+                    android:backgroundTint="@color/primary"
+                    android:textColor="@color/secondary"/>
 
                 <TextView
                     android:id="@+id/totalPesanMakanan"
@@ -88,6 +92,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="2dp"
                     android:layout_weight="0.5"
+                    android:textSize="16dp"
                     android:gravity="center_horizontal"
                     android:text="@string/placeholder_total_pesanan"
                     android:textColor="@color/white" />
@@ -97,7 +102,10 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/plus_sign" />
+                    android:text="@string/plus_sign"
+                    android:textSize="20dp"
+                    android:backgroundTint="@color/primary"
+                    android:textColor="@color/secondary"/>
 
             </LinearLayout>
 
