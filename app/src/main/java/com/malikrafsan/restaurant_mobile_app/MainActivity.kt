@@ -61,6 +61,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             R.id.navigation_twibbon, R.id.navigation_lokasi, R.id.navigation_menu, R.id.navigation_keranjang))
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+        navView.setBackgroundColor(resources.getColor(R.color.primary))
 
         sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
         if (sensorManager.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE) != null) {
