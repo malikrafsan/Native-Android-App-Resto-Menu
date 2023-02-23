@@ -1,20 +1,29 @@
 package com.malikrafsan.restaurant_mobile_app.ui.scan_payment
 
+import android.Manifest
 import android.Manifest.permission.CAMERA
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.BitmapFactory
+import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.view.animation.AnimationUtils
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
@@ -46,6 +55,12 @@ class ScanPaymentActivity : AppCompatActivity() {
     private lateinit var textViewDescription: TextView
     private lateinit var viewModel: ScanPaymentViewModel
     private lateinit var headerFragment: HeaderFragment
+    private lateinit var notificationManager: NotificationManager
+    private lateinit var notificationChannel: NotificationChannel
+    private lateinit var builder: Notification.Builder
+
+    private val CHANNEL_ID = "i.apps.notifications"
+    private val descChannel = "Scan Payment notification"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,6 +81,8 @@ class ScanPaymentActivity : AppCompatActivity() {
         imageViewStatusIcon = findViewById(R.id.imageViewStatusIcon)
         textViewStatus = findViewById(R.id.textViewStatus)
         textViewDescription = findViewById(R.id.textViewDescription)
+
+        notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.CREATED) {
@@ -103,7 +120,7 @@ class ScanPaymentActivity : AppCompatActivity() {
 
         codeScanner.decodeCallback = DecodeCallback {
             runOnUiThread {
-                Toast.makeText(this, "Paying", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Paying", Toast.LENGTH_SHORT).show()
                 pay(it.text)
             }
         }
@@ -111,7 +128,7 @@ class ScanPaymentActivity : AppCompatActivity() {
         codeScanner.errorCallback = ErrorCallback {
             runOnUiThread {
                 Toast.makeText(this, "Camera initialization error: ${it.message}",
-                    Toast.LENGTH_LONG).show()
+                    Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -126,6 +143,7 @@ class ScanPaymentActivity : AppCompatActivity() {
         val requestCall = paymentApi.pay(token)
 
         requestCall.enqueue(object : Callback<PayResponse> {
+            @RequiresApi(Build.VERSION_CODES.TIRAMISU)
             override fun onResponse(call: Call<PayResponse>, response: Response<PayResponse>) {
                 Log.d("PAYMENT", "ON RESPONSE ${response.body()}")
 
@@ -134,7 +152,10 @@ class ScanPaymentActivity : AppCompatActivity() {
                         if (it.status == "FAILED") {
                             Log.d("PAYMENT", "FAILED: $it")
                             Log.d("PAYMENT", it.toString())
-                            displayStatus(false, "Gagal", "Belum dibayar")
+
+                            createNotif(false, "Gagal", "Pesanan gagal dibayarkan")
+                            displayStatus(false, "Gagal", "Pesanan gagal dibayarkan")
+
                             val newIntent = Intent(this@ScanPaymentActivity, ScanPaymentActivity::class.java)
                             startActivity(newIntent)
                             finish()
@@ -143,9 +164,9 @@ class ScanPaymentActivity : AppCompatActivity() {
 
                         Log.d("PAYMENT", "SUCCESSFUL: $it")
                         Log.d("PAYMENT", it.toString())
-                        displayStatus(true, "Berhasil", "Sudah dibayar")
 
-                        Toast.makeText(this@ScanPaymentActivity, "Berhasil", Toast.LENGTH_LONG).show()
+                        createNotif(true, "Berhasil", "Pesanan berhasil dibayarkan")
+                        displayStatus(true, "Berhasil", "Pesanan berhasil dibayarkan")
                         lifecycleScope.launch {
                             viewModel.clearCart()
                             Handler(Looper.getMainLooper()).postDelayed({
@@ -158,14 +179,73 @@ class ScanPaymentActivity : AppCompatActivity() {
                     }
                 } else {
                     Log.d("PAYMENT", "UNSUCCESSFUL: " + response.errorBody().toString())
-                    displayStatus(false, "Gagal", "Belum dibayar")
+
+                    createNotif(false, "Gagal", "Pesanan gagal dibayarkan")
+                    displayStatus(false, "Gagal", "Pesanan gagal dibayarkan")
                 }
             }
+            @RequiresApi(Build.VERSION_CODES.TIRAMISU)
             override fun onFailure(call: Call<PayResponse>, t: Throwable) {
                 Log.d("PAYMENT", "FAILED: " + t.message.toString())
-                displayStatus(false, "Gagal", "Belum dibayar")
+
+                createNotif(false, "Gagal", "Pesanan gagal dibayarkan")
+                displayStatus(false, "Gagal", "Pesanan gagal dibayarkan")
             }
         })
+    }
+
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    private fun createNotif(isSuccess: Boolean, statusMsg: String, statusDesc: String) {
+        val intent = Intent(this, ScanPaymentActivity::class.java)
+        val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+
+        val contentView = RemoteViews(packageName, R.layout.notif_layout)
+        val title = "Status Pembayaran Majika"
+        val icon = if (isSuccess) R.drawable.ok else R.drawable.cancel
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            notificationChannel = NotificationChannel(CHANNEL_ID, descChannel, NotificationManager.IMPORTANCE_HIGH)
+            notificationChannel.enableLights(true)
+            notificationChannel.lightColor = Color.GREEN
+            notificationChannel.enableVibration(false)
+            notificationManager.createNotificationChannel(notificationChannel)
+
+            builder = Notification.Builder(this, CHANNEL_ID)
+                .setContent(contentView)
+                .setContentTitle(title)
+                .setContentText(statusMsg)
+                .setStyle(Notification.BigTextStyle()
+                    .bigText(statusDesc))
+                .setSmallIcon(icon)
+                .setLargeIcon(BitmapFactory.decodeResource(this.resources, R.drawable.ok))
+                .setContentIntent(pendingIntent)
+        } else {
+            builder = Notification.Builder(this)
+                .setContent(contentView)
+                .setContentTitle(title)
+                .setContentText(statusMsg)
+                .setStyle(Notification.BigTextStyle()
+                    .bigText(statusDesc))
+                .setSmallIcon(icon)
+                .setLargeIcon(BitmapFactory.decodeResource(this.resources, R.drawable.ok))
+                .setContentIntent(pendingIntent)
+        }
+
+        with(NotificationManagerCompat.from(this)) {
+            if (ActivityCompat.checkSelfPermission(
+                    this@ScanPaymentActivity,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                ActivityCompat.requestPermissions(
+                    this@ScanPaymentActivity,
+                    arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+                    123)
+                return
+            }
+            notify(1, builder.build())
+        }
+//        notificationManager.notify(1234, builder.build())
     }
 
     private fun displayStatus(isSuccess: Boolean, statusMsg: String, statusDesc: String) {

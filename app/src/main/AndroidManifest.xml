@@ -10,6 +10,7 @@
         android:name="android.hardware.camera.any"
         android:required="true" />
 
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <application
         android:name=".MainApp"
         android:allowBackup="true"
