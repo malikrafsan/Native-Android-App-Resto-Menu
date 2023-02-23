@@ -16,37 +16,6 @@ class ScanPaymentViewModel @Inject constructor(
 ) : ViewModel() {
     val carts = repository.getAll()
 
-    fun onEvent(event: CartEvent){
-        when(event){
-            is CartEvent.ChangeQty -> {
-                viewModelScope.launch {
-                    if (event.qty == 0) {
-                        repository.delete(event.cart)
-                    } else {
-                        repository.insert(
-                            event.cart.copy(
-                                qty = event.qty
-                            )
-                        )
-                    }
-                }
-            }
-            is CartEvent.onAddClick -> {
-                Log.i("Onclick", "onAddClick")
-                viewModelScope.launch {
-                    repository.insert(
-                        event.cart
-                    )
-                }
-                Log.i("OnClick", carts.toString())
-            }
-        }
-    }
-
-    suspend fun addCart(cart: Cart){
-        repository.insert(cart);
-    }
-
     suspend fun clearCart() {
         repository.deleteAll()
     }

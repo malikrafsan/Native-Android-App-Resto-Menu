@@ -1,6 +1,5 @@
 package com.malikrafsan.restaurant_mobile_app
 
-import android.content.Intent
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
@@ -8,9 +7,6 @@ import android.hardware.SensorManager
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Button
-import android.widget.TextView
-import android.widget.Toast
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -19,24 +15,13 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import com.malikrafsan.restaurant_mobile_app.api.BranchApi
-import com.malikrafsan.restaurant_mobile_app.api.MenuApi
-import com.malikrafsan.restaurant_mobile_app.api.Payment
-import com.malikrafsan.restaurant_mobile_app.builder.ApiBuilder
 import com.malikrafsan.restaurant_mobile_app.databinding.ActivityMainBinding
-import com.malikrafsan.restaurant_mobile_app.dto.Branch
-import com.malikrafsan.restaurant_mobile_app.dto.Menu
-import com.malikrafsan.restaurant_mobile_app.dto.PayResponse
 import com.malikrafsan.restaurant_mobile_app.ui.keranjang.KeranjangFragment
 import com.malikrafsan.restaurant_mobile_app.ui.menu.MenuFragment
 import com.malikrafsan.restaurant_mobile_app.ui.restaurant.RestaurantFragment
 import com.malikrafsan.restaurant_mobile_app.ui.shared.HeaderFragment
 import com.malikrafsan.restaurant_mobile_app.ui.twibbon.TwibbonFragment
 import dagger.hilt.android.AndroidEntryPoint
-
-import retrofit2.Call
-import retrofit2.Response
-import retrofit2.Callback
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(), SensorEventListener {
@@ -95,9 +80,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
                         headerFragment.setArrowBackVisibility(View.GONE)
                         headerFragment.setTempTextVisibility(View.GONE)
                     }
-                    else -> {
-
-                    }
+                    else -> {}
                 }
             }
         }, true)

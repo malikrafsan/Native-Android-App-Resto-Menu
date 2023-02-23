@@ -17,7 +17,6 @@ class KeranjangAdapter(
     private val data: List<Cart>,
     private val cartViewModel: CartViewModel
 ) : RecyclerView.Adapter<KeranjangAdapter.ViewHolder>() {
-
     // create new views
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         // inflates the card_view_design view
@@ -48,7 +47,6 @@ class KeranjangAdapter(
         holder.minusQtyBtn.setOnClickListener {
             cartViewModel.onEvent(CartEvent.ChangeQty(datum, datum.qty - 1))
         }
-
     }
 
     // return the number of the items in the list

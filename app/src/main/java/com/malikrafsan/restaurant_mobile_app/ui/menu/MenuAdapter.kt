@@ -17,8 +17,6 @@ class MenuAdapter (
     private val listMenu: List<Cart>,
     private val viewModel: CartViewModel
 ): RecyclerView.Adapter<MenuAdapter.Holder>() {
-
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         val itemView = LayoutInflater.from(parent.context).inflate(com.malikrafsan.restaurant_mobile_app.R.layout.list_makanan, parent, false)
         return Holder(itemView)

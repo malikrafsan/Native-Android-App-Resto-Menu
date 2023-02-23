@@ -43,10 +43,6 @@ class CartViewModel @Inject constructor(
         }
     }
 
-    suspend fun addCart(cart: Cart){
-        repository.insert(cart);
-    }
-
     suspend fun deleteCart(cart: Cart) {
         repository.delete(cart)
     }

@@ -32,11 +32,7 @@ class KeranjangFragment : Fragment() {
     private var carts: MutableList<Cart> = mutableListOf()
     private var totalAmount: Int = 0
     private val viewModel: CartViewModel by viewModels()
-    private var random = Random(100)
     private lateinit var totalPriceTextView: TextView
-
-  // This property is only valid between onCreateView and
-  // onDestroyView.
 
     private fun registerEvent(view: View) {
         view.findViewById<Button>(com.malikrafsan.restaurant_mobile_app.R.id.bayar).setOnClickListener {
@@ -66,7 +62,6 @@ class KeranjangFragment : Fragment() {
 
     private fun collectCart(lst: List<Cart>) {
         this.carts.clear()
-//        this.carts = lst as MutableList<Cart>
         this.totalAmount = 0
         Log.d("this Carts", this.carts.toString())
         lst.forEach {
@@ -88,7 +83,6 @@ class KeranjangFragment : Fragment() {
             carts,
             viewModel
         )
-
 
         registerEvent(view)
         registerElmt(view)

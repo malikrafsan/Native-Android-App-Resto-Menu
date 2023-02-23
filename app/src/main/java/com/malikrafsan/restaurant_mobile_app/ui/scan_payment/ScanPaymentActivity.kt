@@ -30,12 +30,9 @@ import com.malikrafsan.restaurant_mobile_app.entity.Cart
 import com.malikrafsan.restaurant_mobile_app.ui.shared.HeaderFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import java.util.Timer
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import kotlin.concurrent.schedule
-
 
 @AndroidEntryPoint
 class ScanPaymentActivity : AppCompatActivity() {

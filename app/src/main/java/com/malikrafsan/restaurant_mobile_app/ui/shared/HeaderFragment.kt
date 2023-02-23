@@ -1,18 +1,12 @@
 package com.malikrafsan.restaurant_mobile_app.ui.shared
 
-import android.hardware.Sensor
-import android.hardware.SensorEvent
-import android.hardware.SensorEventListener
-import android.hardware.SensorManager
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import com.malikrafsan.restaurant_mobile_app.R
 import com.malikrafsan.restaurant_mobile_app.databinding.FragmentHeaderBinding
 
 class HeaderFragment : Fragment() {
