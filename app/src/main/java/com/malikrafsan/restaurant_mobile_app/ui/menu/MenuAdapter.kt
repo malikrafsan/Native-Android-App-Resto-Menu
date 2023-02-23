@@ -6,13 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.res.TypedArrayUtils.getString
 import androidx.recyclerview.widget.RecyclerView
 import com.malikrafsan.restaurant_mobile_app.entity.Cart
 import com.malikrafsan.restaurant_mobile_app.event.CartEvent
 import com.malikrafsan.restaurant_mobile_app.ui.keranjang.CartViewModel
 
 class MenuAdapter (
-    private val ctx: Context,
+    private val context: Context,
     private val listMenu: List<Cart>,
     private val viewModel: CartViewModel
 ): RecyclerView.Adapter<MenuAdapter.Holder>() {
@@ -25,10 +26,19 @@ class MenuAdapter (
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
         val currentItem = this.listMenu[position]
+
+        var harga : String = currentItem.price.toString().reversed().chunked(3).joinToString(".").reversed()
+        var sold : String = if (currentItem.sold > 1000000) {
+            (currentItem.sold / 1000000).toString() + "JT+ terjual"
+        } else if (currentItem.sold > 1000) {
+            (currentItem.sold / 1000).toString() + "RB+ terjual"
+        } else {
+            currentItem.sold.toString() + " terjual"
+        }
+
         holder.namaMakanan.text = currentItem.name
-//        holder.hargaMakanan.text = currentItem.currency + currentItem.price.toString()
-        holder.hargaMakanan.text = currentItem.currency + currentItem.price.toString()
-        holder.terjualMakanan.text = currentItem.sold.toString() + " terjual"
+        holder.hargaMakanan.text = context.getString(com.malikrafsan.restaurant_mobile_app.R.string.hargaMakanan, currentItem.currency, harga)
+        holder.terjualMakanan.text = sold
         holder.deskripsiMakanan.text = currentItem.description
         holder.totalPesanMakanan.text = currentItem.qty.toString()
 
