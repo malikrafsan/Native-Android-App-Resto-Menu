@@ -74,7 +74,7 @@ class KeranjangFragment : Fragment() {
             this.totalAmount += it.price * it.qty
         }
         Log.d("test", "up")
-        this.totalPriceTextView.text = "Rp $totalAmount"
+        this.totalPriceTextView.text = context?.getString(com.malikrafsan.restaurant_mobile_app.R.string.hargaMakanan, "IDR", this.totalAmount.toString().reversed().chunked(3).joinToString(".").reversed())
 
         recyclerView.adapter?.notifyDataSetChanged()
         Log.d("test", "end")

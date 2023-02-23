@@ -38,7 +38,8 @@ class KeranjangAdapter(
         holder.nama.text = datum.name
 
         // sets the text to the textview from our itemHolder class
-        holder.harga.text = datum.price.toString()
+        val context = holder.nama.context
+        holder.harga.text = context.getString(com.malikrafsan.restaurant_mobile_app.R.string.hargaMakanan, datum.currency, datum.price.toString().reversed().chunked(3).joinToString(".").reversed())
 
         holder.qtyPesanan.text = datum.qty.toString()
         holder.plusQtyBtn.setOnClickListener {
