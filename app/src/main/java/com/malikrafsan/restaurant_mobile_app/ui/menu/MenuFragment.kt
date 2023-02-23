@@ -19,7 +19,7 @@ import com.malikrafsan.restaurant_mobile_app.api.MenuApi
 import com.malikrafsan.restaurant_mobile_app.builder.ApiBuilder
 import com.malikrafsan.restaurant_mobile_app.databinding.FragmentMenuBinding
 import com.malikrafsan.restaurant_mobile_app.entity.Cart
-import com.malikrafsan.restaurant_mobile_app.ui.keranjang.CartViewModel
+import com.malikrafsan.restaurant_mobile_app.ui.keranjang.KeranjangViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import retrofit2.Call
@@ -44,7 +44,7 @@ class MenuFragment : Fragment() {
     private val menuMinuman: MutableList<Cart> = mutableListOf()
     private val tempMenuMinuman: MutableList<Cart> = mutableListOf()
 
-    private val viewModel: CartViewModel by viewModels()
+    private val viewModel: KeranjangViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,

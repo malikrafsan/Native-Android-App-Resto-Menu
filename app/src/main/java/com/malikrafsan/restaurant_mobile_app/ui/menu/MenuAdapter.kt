@@ -1,21 +1,19 @@
 package com.malikrafsan.restaurant_mobile_app.ui.menu
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.core.content.res.TypedArrayUtils.getString
 import androidx.recyclerview.widget.RecyclerView
 import com.malikrafsan.restaurant_mobile_app.entity.Cart
 import com.malikrafsan.restaurant_mobile_app.event.CartEvent
-import com.malikrafsan.restaurant_mobile_app.ui.keranjang.CartViewModel
+import com.malikrafsan.restaurant_mobile_app.ui.keranjang.KeranjangViewModel
 
 class MenuAdapter (
     private val context: Context,
     private val listMenu: List<Cart>,
-    private val viewModel: CartViewModel
+    private val viewModel: KeranjangViewModel
 ): RecyclerView.Adapter<MenuAdapter.Holder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         val itemView = LayoutInflater.from(parent.context).inflate(com.malikrafsan.restaurant_mobile_app.R.layout.list_makanan, parent, false)

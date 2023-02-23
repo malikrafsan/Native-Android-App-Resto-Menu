@@ -20,7 +20,6 @@ import com.malikrafsan.restaurant_mobile_app.databinding.FragmentKeranjangBindin
 import com.malikrafsan.restaurant_mobile_app.entity.Cart
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import kotlin.random.Random
 
 
 @AndroidEntryPoint
@@ -31,7 +30,7 @@ class KeranjangFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private var carts: MutableList<Cart> = mutableListOf()
     private var totalAmount: Int = 0
-    private val viewModel: CartViewModel by viewModels()
+    private val viewModel: KeranjangViewModel by viewModels()
     private lateinit var totalPriceTextView: TextView
 
     private fun registerEvent(view: View) {

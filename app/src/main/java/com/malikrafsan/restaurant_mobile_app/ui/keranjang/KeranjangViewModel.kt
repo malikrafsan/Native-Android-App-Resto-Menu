@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class CartViewModel @Inject constructor(
+class KeranjangViewModel @Inject constructor(
     private val repository: CartRepository
 ) : ViewModel() {
     val carts = repository.getAll()
