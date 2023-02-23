@@ -144,6 +144,7 @@ class ScanPaymentActivity : AppCompatActivity() {
                         Log.d("PAYMENT", it.toString())
                         displayStatus(true, "Berhasil", "Sudah dibayar")
 
+                        Toast.makeText(this@ScanPaymentActivity, "Berhasil", Toast.LENGTH_LONG).show()
                         lifecycleScope.launch {
                             viewModel.clearCart()
                             Handler(Looper.getMainLooper()).postDelayed({
