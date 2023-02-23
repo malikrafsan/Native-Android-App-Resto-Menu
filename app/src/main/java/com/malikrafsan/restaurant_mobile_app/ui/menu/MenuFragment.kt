@@ -50,7 +50,7 @@ class MenuFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         this._binding = FragmentMenuBinding.inflate(
             inflater,
             container,
@@ -225,6 +225,9 @@ class MenuFragment : Fragment() {
 
                     tempMenuMakanan.addAll(menuMakanan)
                     tempMenuMinuman.addAll(menuMinuman)
+
+                    menuMakananRecyclerView.adapter!!.notifyDataSetChanged()
+                    menuMinumanRecyclerView.adapter!!.notifyDataSetChanged()
                 }
             }
 
