@@ -11,10 +11,10 @@
         android:layout_gravity="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardBackgroundColor="@color/teal_700"
+        app:cardBackgroundColor="@color/secondary"
         app:contentPadding="10dp"
         app:cardElevation="6dp"
-        app:cardCornerRadius="4dp"
+        app:cardCornerRadius="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -41,7 +41,7 @@
                 android:textColor="@color/white"
                 android:text="Harga" />
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
@@ -56,6 +56,7 @@
                         android:layout_height="wrap_content"
                         android:textColor="@color/white"
                         android:text="Jumlah: "
+                        android:textSize="16dp"
                         android:layout_marginTop="15dp"
                         android:layout_marginRight="90dp"
                         />
@@ -66,31 +67,42 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     >
                     <Button
                         android:id="@+id/minusQtyButton"
-                        android:layout_width="0dp"
+                        android:layout_width="40dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="-" />
+                        android:textSize="20dp"
+                        android:padding="0dp"
+                        android:text="-"
+                        android:textColor="@color/secondary"
+                        android:backgroundTint="@color/primary" />
                     <TextView
                         android:id="@+id/jumlahMakanan"
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:textAlignment="center"
+                        android:textColor="@color/white"
                         android:layout_marginHorizontal="10dp"
-                        android:text="0"/>
+                        android:text="0"
+                        android:textSize="16dp"/>
 
                     <Button
                         android:id="@+id/plusQtyButton"
-                        android:layout_width="0dp"
+                        android:layout_width="40dp"
+                        android:textSize="20dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="+" />
+                        android:text="+"
+                        android:textColor="@color/secondary"
+                        android:backgroundTint="@color/primary"/>
 
                 </LinearLayout>
 
-            </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>
