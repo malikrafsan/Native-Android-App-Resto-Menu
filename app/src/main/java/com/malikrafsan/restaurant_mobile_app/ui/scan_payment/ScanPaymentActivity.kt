@@ -1,27 +1,25 @@
 package com.malikrafsan.restaurant_mobile_app.ui.scan_payment
 
 import android.Manifest.permission.CAMERA
+import android.content.Intent
 import android.content.pm.PackageManager
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.budiyev.android.codescanner.AutoFocusMode
-import com.budiyev.android.codescanner.CodeScanner
-import com.budiyev.android.codescanner.CodeScannerView
-import com.budiyev.android.codescanner.DecodeCallback
-import com.budiyev.android.codescanner.ErrorCallback
-import com.budiyev.android.codescanner.ScanMode
+import com.budiyev.android.codescanner.*
+import com.malikrafsan.restaurant_mobile_app.MainActivity
 import com.malikrafsan.restaurant_mobile_app.R
 import com.malikrafsan.restaurant_mobile_app.api.Payment
 import com.malikrafsan.restaurant_mobile_app.builder.ApiBuilder
@@ -29,12 +27,13 @@ import com.malikrafsan.restaurant_mobile_app.databinding.ActivityScanPaymentBind
 import com.malikrafsan.restaurant_mobile_app.dto.PayResponse
 import com.malikrafsan.restaurant_mobile_app.entity.Cart
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import java.util.Timer
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import kotlin.random.Random
+import kotlin.concurrent.schedule
+
 
 @AndroidEntryPoint
 class ScanPaymentActivity : AppCompatActivity() {
@@ -128,6 +127,9 @@ class ScanPaymentActivity : AppCompatActivity() {
                             Log.d("PAYMENT", "FAILED: $it")
                             Log.d("PAYMENT", it.toString())
                             displayStatus(false, "Gagal", "Belum dibayar")
+                            val newIntent = Intent(this@ScanPaymentActivity, ScanPaymentActivity::class.java)
+                            startActivity(newIntent)
+                            finish()
                             return
                         }
 
@@ -137,7 +139,13 @@ class ScanPaymentActivity : AppCompatActivity() {
 
                         lifecycleScope.launch {
                             viewModel.clearCart()
+                            Handler(Looper.getMainLooper()).postDelayed({
+                                val newIntent = Intent(this@ScanPaymentActivity, MainActivity::class.java)
+                                startActivity(newIntent)
+                                finish()
+                            }, 5000)
                         }
+
                     }
                 } else {
                     Log.d("PAYMENT", "UNSUCCESSFUL: " + response.errorBody().toString())
