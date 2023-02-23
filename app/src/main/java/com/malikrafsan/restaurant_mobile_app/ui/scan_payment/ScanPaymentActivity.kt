@@ -5,13 +5,16 @@ import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.ActionBar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -28,12 +31,14 @@ import com.malikrafsan.restaurant_mobile_app.builder.ApiBuilder
 import com.malikrafsan.restaurant_mobile_app.databinding.ActivityScanPaymentBinding
 import com.malikrafsan.restaurant_mobile_app.dto.PayResponse
 import com.malikrafsan.restaurant_mobile_app.entity.Cart
+import com.malikrafsan.restaurant_mobile_app.ui.shared.HeaderFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import retrofit2.http.Header
 import kotlin.random.Random
 
 @AndroidEntryPoint
@@ -46,11 +51,17 @@ class ScanPaymentActivity : AppCompatActivity() {
     private lateinit var textViewStatus: TextView
     private lateinit var textViewDescription: TextView
     private lateinit var viewModel: ScanPaymentViewModel
+    private lateinit var headerFragment: HeaderFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityScanPaymentBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        supportActionBar?.hide()
+        headerFragment = supportFragmentManager.findFragmentById(R.id.header_fragment) as HeaderFragment
+        headerFragment.setHeaderText("Pembayaran")
+        headerFragment.setArrowBackVisibility(View.VISIBLE)
 
         viewModel = ViewModelProvider(this).get(ScanPaymentViewModel::class.java)
 

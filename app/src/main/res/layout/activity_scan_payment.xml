@@ -12,6 +12,15 @@
         android:orientation="vertical"
         tools:layout_editor_absoluteX="1dp"
         tools:layout_editor_absoluteY="2dp">
+
+        <fragment
+            android:id="@+id/header_fragment"
+            android:name="com.malikrafsan.restaurant_mobile_app.ui.shared.HeaderFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout="@layout/fragment_header" />
+
         <TextView
             android:id="@+id/scanHeaderTextView"
             android:layout_width="wrap_content"

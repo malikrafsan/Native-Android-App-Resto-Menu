@@ -29,7 +29,6 @@ class TwibbonFragment : Fragment() {
     private var cameraSelector : CameraSelector? = null
     private lateinit var cameraProvider : ProcessCameraProvider
     private var freeze = false
-//    private var hasTakenPic = false
     private lateinit var captionBtn: TextView
 
     override fun onCreateView(

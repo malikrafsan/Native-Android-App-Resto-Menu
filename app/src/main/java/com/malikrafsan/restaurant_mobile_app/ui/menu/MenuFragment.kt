@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
@@ -45,6 +46,7 @@ class MenuFragment : Fragment() {
     private val tempMenuMinuman: MutableList<Cart> = mutableListOf()
 
     private val viewModel: CartViewModel by viewModels()
+    private lateinit var headerTextView: TextView
 
     override fun onCreateView(
         inflater: LayoutInflater,
