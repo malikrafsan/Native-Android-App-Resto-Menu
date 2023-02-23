@@ -5,11 +5,16 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatDelegate
 import com.malikrafsan.restaurant_mobile_app.MainActivity
 import com.malikrafsan.restaurant_mobile_app.R
 
 class SplashActivity : AppCompatActivity() {
+    private lateinit var imgView: ImageView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
@@ -17,10 +22,14 @@ class SplashActivity : AppCompatActivity() {
 
         supportActionBar?.hide()
 
+        val imgAnim = AnimationUtils.loadAnimation(this, R.anim.splash_img_animation)
+        imgView = findViewById(R.id.imageView)
+        imgView.startAnimation(imgAnim)
+
         Handler(Looper.getMainLooper()).postDelayed({
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
             finish()
-        }, 1500)
+        }, 2000)
     }
 }
