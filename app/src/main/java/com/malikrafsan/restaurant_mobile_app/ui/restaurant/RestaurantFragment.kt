@@ -56,7 +56,10 @@ class RestaurantFragment : Fragment() {
                         response.body()?.let {
                             val fetchedMenu: com.malikrafsan.restaurant_mobile_app.dto.Branch? = response.body()
                             fetchedMenu?.data?.forEach{
-                                datarestaurant.add(RestaurantViewModel(it.name, it.address, it.contact_person, it.latitude, it.longitude))
+                                datarestaurant.add(RestaurantViewModel(it.name, it.address, it.phone_number, it.latitude, it.longitude))
+                            }
+                            datarestaurant.sortBy {
+                                it.namaRestaurant
                             }
                             val adapter = RestaurantAdapter(datarestaurant)
 
@@ -99,7 +102,6 @@ class RestaurantFragment : Fragment() {
                 if (response.isSuccessful) {
                     response.body()?.let {
                         val fetchedMenu: com.malikrafsan.restaurant_mobile_app.dto.Branch? = response.body()
-                        println("MASUK")
                         fetchedMenu?.data?.forEach{
                             println(fetchedMenu.data)
                             datarestaurant.add(RestaurantViewModel(it.name, it.address, it.contact_person, it.latitude, it.longitude))
