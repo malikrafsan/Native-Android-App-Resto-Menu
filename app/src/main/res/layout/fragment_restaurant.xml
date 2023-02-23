@@ -15,7 +15,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/restaurantRecyclerview"
             android:layout_width="match_parent"
-            android:layout_height="568dp"
+            android:layout_height="700dp"
             tools:itemCount="5"
             tools:listitem="@layout/fragment_daftar_restaurant" />
 

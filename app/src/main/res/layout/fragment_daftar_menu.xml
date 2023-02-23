@@ -14,7 +14,11 @@
         app:cardBackgroundColor="@color/teal_700"
         app:contentPadding="10dp"
         app:cardElevation="6dp"
-        app:cardCornerRadius="4dp">
+        app:cardCornerRadius="4dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -51,7 +55,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textColor="@color/white"
-                        android:text="Terjual: "
+                        android:text="Jumlah: "
                         android:layout_marginTop="15dp"
                         android:layout_marginRight="90dp"
                         />
@@ -65,9 +69,10 @@
                     >
                     <Button
                         android:id="@+id/minusQtyButton"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="minus" />
+                        android:layout_weight="1"
+                        android:text="-" />
                     <TextView
                         android:id="@+id/jumlahMakanan"
                         android:layout_width="20dp"
@@ -76,13 +81,14 @@
                         android:layout_marginHorizontal="10dp"
                         android:text="0"/>
 
-                </LinearLayout>
+                    <Button
+                        android:id="@+id/plusQtyButton"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="+" />
 
-                <Button
-                    android:id="@+id/plusQtyButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="plus" />
+                </LinearLayout>
 
             </LinearLayout>
 
