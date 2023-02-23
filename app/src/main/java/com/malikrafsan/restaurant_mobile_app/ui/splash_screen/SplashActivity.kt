@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatDelegate
@@ -22,7 +21,7 @@ class SplashActivity : AppCompatActivity() {
 
         supportActionBar?.hide()
 
-        val imgAnim = AnimationUtils.loadAnimation(this, R.anim.splash_img_animation)
+        val imgAnim = AnimationUtils.loadAnimation(this, R.anim.grow_fade_in)
         imgView = findViewById(R.id.imageView)
         imgView.startAnimation(imgAnim)
 

@@ -7,6 +7,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
+import android.view.animation.RotateAnimation
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -76,9 +79,14 @@ class TwibbonFragment : Fragment() {
         if (freeze) {
             imagePreview!!.setSurfaceProvider(null)
             this.captionBtn.text = "Take Again?"
+
+            val rotateAnim = RotateAnimation(0F,360F,Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f)
+            rotateAnim.duration = 500
+            binding.captureIcon.startAnimation(rotateAnim)
         } else {
             imagePreview!!.setSurfaceProvider(binding.twibbonImage.surfaceProvider)
             this.captionBtn.text = "Capture"
+            binding.captureIcon.clearAnimation()
         }
     }
 

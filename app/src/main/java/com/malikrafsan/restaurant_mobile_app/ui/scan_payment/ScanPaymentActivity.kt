@@ -179,7 +179,7 @@ class ScanPaymentActivity : AppCompatActivity() {
         this.textViewStatus.text = statusMsg
         this.textViewDescription.text = statusDesc
 
-        val imgAnim = AnimationUtils.loadAnimation(this, R.anim.splash_img_animation)
+        val imgAnim = AnimationUtils.loadAnimation(this, R.anim.grow_fade_in)
         this.imageViewStatusIcon.startAnimation(imgAnim)
     }
 
