@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".ui.shared.HeaderFragment"
+    android:background="#F7E1C9">
+
+    <ImageView
+        android:id="@+id/arrow_back"
+        android:layout_marginStart="0dp"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:padding="20dp"
+        android:src="@drawable/arrow_back"
+        android:scaleType="center"
+        android:layout_gravity="center_vertical" />
+
+    <TextView
+        android:id="@+id/header_text"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="Menu"
+        android:textStyle="bold"
+        android:textSize="20dp"
+        android:textColor="#000000"
+        android:padding="20dp"
+        android:gravity="center" />
+
+    <TextView
+        android:id="@+id/temp_text"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@string/celcius_symbol"
+        android:textStyle="bold"
+        android:textSize="20dp"
+        android:textColor="#000000"
+        android:padding="20dp"
+        android:gravity="end" />
+
+</FrameLayout>

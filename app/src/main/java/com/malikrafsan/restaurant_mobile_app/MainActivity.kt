@@ -7,11 +7,14 @@ import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -24,6 +27,11 @@ import com.malikrafsan.restaurant_mobile_app.databinding.ActivityMainBinding
 import com.malikrafsan.restaurant_mobile_app.dto.Branch
 import com.malikrafsan.restaurant_mobile_app.dto.Menu
 import com.malikrafsan.restaurant_mobile_app.dto.PayResponse
+import com.malikrafsan.restaurant_mobile_app.ui.keranjang.KeranjangFragment
+import com.malikrafsan.restaurant_mobile_app.ui.menu.MenuFragment
+import com.malikrafsan.restaurant_mobile_app.ui.restaurant.RestaurantFragment
+import com.malikrafsan.restaurant_mobile_app.ui.shared.HeaderFragment
+import com.malikrafsan.restaurant_mobile_app.ui.twibbon.TwibbonFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 import retrofit2.Call
@@ -32,23 +40,23 @@ import retrofit2.Callback
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(), SensorEventListener {
-
-private lateinit var binding: ActivityMainBinding
-private lateinit var sensor: Sensor
-private lateinit var sensorManager: SensorManager
-private var isTemperatureSensorAvailable: Boolean = false
+    private lateinit var binding: ActivityMainBinding
+    private lateinit var sensor: Sensor
+    private lateinit var sensorManager: SensorManager
+    private var isTemperatureSensorAvailable: Boolean = false
+    private lateinit var headerFragment: HeaderFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-     binding = ActivityMainBinding.inflate(layoutInflater)
-     setContentView(binding.root)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        supportActionBar?.hide()
+
+        headerFragment = supportFragmentManager.findFragmentById(R.id.header_fragment) as HeaderFragment
 
         val navView: BottomNavigationView = binding.navView
-
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
         val appBarConfiguration = AppBarConfiguration(setOf(
             R.id.navigation_twibbon, R.id.navigation_lokasi, R.id.navigation_menu, R.id.navigation_keranjang))
         setupActionBarWithNavController(navController, appBarConfiguration)
@@ -59,18 +67,44 @@ private var isTemperatureSensorAvailable: Boolean = false
             sensor = sensorManager.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE)
             isTemperatureSensorAvailable = true
         } else {
-            findViewById<TextView>(R.id.textViewTemperature).text = "Temperature sensor is not available"
             isTemperatureSensorAvailable = false
         }
 
-//        loadMenu()
-//        loadFoodMenu()
-//        loadDrinkMenu()
-//        loadBranch()
+        supportFragmentManager.registerFragmentLifecycleCallbacks(object : FragmentManager.FragmentLifecycleCallbacks() {
+            override fun onFragmentResumed(fm: FragmentManager, f: Fragment) {
+                super.onFragmentResumed(fm, f)
+                when (f) {
+                    is TwibbonFragment -> {
+                        headerFragment.setHeaderText("Twibbon")
+                        headerFragment.setArrowBackVisibility(View.GONE)
+                        headerFragment.setTempTextVisibility(View.GONE)
+                    }
+                    is RestaurantFragment -> {
+                        headerFragment.setHeaderText("Cabang Restoran")
+                        headerFragment.setArrowBackVisibility(View.GONE)
+                        headerFragment.setTempTextVisibility(View.GONE)
+                    }
+                    is MenuFragment -> {
+                        headerFragment.setHeaderText("Menu")
+                        headerFragment.setArrowBackVisibility(View.GONE)
+                        headerFragment.setTempTextVisibility(View.VISIBLE)
+                    }
+                    is KeranjangFragment -> {
+                        headerFragment.setHeaderText("Keranjang")
+                        headerFragment.setArrowBackVisibility(View.GONE)
+                        headerFragment.setTempTextVisibility(View.GONE)
+                    }
+                    else -> {
+
+                    }
+                }
+            }
+        }, true)
     }
 
     override fun onSensorChanged(event: SensorEvent?) {
-        findViewById<TextView>(R.id.textViewTemperature).text = "Temperature: ${event?.values?.get(0)} C"
+        val temp = event?.values?.get(0)
+        headerFragment.setTempText(temp)
     }
 
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
@@ -89,77 +123,5 @@ private var isTemperatureSensorAvailable: Boolean = false
         if (isTemperatureSensorAvailable) {
             sensorManager.unregisterListener(this)
         }
-    }
-
-    private fun loadMenu() {
-        val menu = ApiBuilder.buildApi(MenuApi::class.java)
-        val requestCall = menu.getMenu()
-
-        requestCall.enqueue(object : Callback<Menu> {
-            override fun onResponse(call: Call<Menu>, response: Response<Menu>) {
-                if (response.isSuccessful) {
-                    response.body()?.let {
-                        Toast.makeText(this@MainActivity, "$it", Toast.LENGTH_SHORT).show()
-                    }
-                }
-            }
-            override fun onFailure(call: Call<Menu>, t: Throwable) {
-                Toast.makeText(this@MainActivity, "${t.message}", Toast.LENGTH_SHORT).show()
-            }
-        })
-    }
-
-    private fun loadFoodMenu() {
-        val menu = ApiBuilder.buildApi(MenuApi::class.java)
-        val requestCall = menu.getFoodMenu()
-
-        requestCall.enqueue(object : Callback<Menu> {
-            override fun onResponse(call: Call<Menu>, response: Response<Menu>) {
-                if (response.isSuccessful) {
-                    response.body()?.let {
-                        Toast.makeText(this@MainActivity, "$it", Toast.LENGTH_SHORT).show()
-                    }
-                }
-            }
-            override fun onFailure(call: Call<Menu>, t: Throwable) {
-                Toast.makeText(this@MainActivity, "${t.message}", Toast.LENGTH_SHORT).show()
-            }
-        })
-    }
-
-    private fun loadDrinkMenu() {
-        val menu = ApiBuilder.buildApi(MenuApi::class.java)
-        val requestCall = menu.getDrinkMenu()
-
-        requestCall.enqueue(object : Callback<Menu> {
-            override fun onResponse(call: Call<Menu>, response: Response<Menu>) {
-                if (response.isSuccessful) {
-                    response.body()?.let {
-                        Toast.makeText(this@MainActivity, "$it", Toast.LENGTH_SHORT).show()
-                    }
-                }
-            }
-            override fun onFailure(call: Call<Menu>, t: Throwable) {
-                Toast.makeText(this@MainActivity, "${t.message}", Toast.LENGTH_SHORT).show()
-            }
-        })
-    }
-
-    private fun loadBranch() {
-        val branch = ApiBuilder.buildApi(BranchApi::class.java)
-        val requestCall = branch.getBranch()
-
-        requestCall.enqueue(object : Callback<Branch> {
-            override fun onResponse(call: Call<Branch>, response: Response<Branch>) {
-                if (response.isSuccessful) {
-                    response.body()?.let {
-                        Toast.makeText(this@MainActivity, "$it", Toast.LENGTH_SHORT).show()
-                    }
-                }
-            }
-            override fun onFailure(call: Call<Branch>, t: Throwable) {
-                Toast.makeText(this@MainActivity, "${t.message}", Toast.LENGTH_SHORT).show()
-            }
-        })
     }
 }

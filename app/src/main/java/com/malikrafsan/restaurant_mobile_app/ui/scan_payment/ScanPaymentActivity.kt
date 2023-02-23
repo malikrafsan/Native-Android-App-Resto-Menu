@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -26,6 +27,7 @@ import com.malikrafsan.restaurant_mobile_app.builder.ApiBuilder
 import com.malikrafsan.restaurant_mobile_app.databinding.ActivityScanPaymentBinding
 import com.malikrafsan.restaurant_mobile_app.dto.PayResponse
 import com.malikrafsan.restaurant_mobile_app.entity.Cart
+import com.malikrafsan.restaurant_mobile_app.ui.shared.HeaderFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.util.Timer
@@ -45,11 +47,19 @@ class ScanPaymentActivity : AppCompatActivity() {
     private lateinit var textViewStatus: TextView
     private lateinit var textViewDescription: TextView
     private lateinit var viewModel: ScanPaymentViewModel
+    private lateinit var headerFragment: HeaderFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityScanPaymentBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        supportActionBar?.hide()
+
+        headerFragment = supportFragmentManager.findFragmentById(R.id.header_fragment) as HeaderFragment
+        headerFragment.setTempTextVisibility(View.GONE)
+        headerFragment.setArrowBackVisibility(View.VISIBLE)
+        headerFragment.setHeaderText("Pembayaran")
 
         viewModel = ViewModelProvider(this).get(ScanPaymentViewModel::class.java)
 

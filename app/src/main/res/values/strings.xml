@@ -20,4 +20,7 @@
     <string name="placeholder_search">Search…</string>
     <string name="makanan">Makanan</string>
     <string name="minuman">Minuman</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="celcius_symbol">°C</string>
 </resources>
