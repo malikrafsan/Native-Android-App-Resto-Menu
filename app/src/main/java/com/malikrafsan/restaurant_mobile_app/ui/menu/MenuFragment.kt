@@ -212,6 +212,8 @@ class MenuFragment : Fragment() {
                 if (response.isSuccessful) {
                     val fetchedMenuMakanan: com.malikrafsan.restaurant_mobile_app.dto.Menu? =
                         response.body()
+                    menuMakanan.clear()
+                    menuMinuman.clear()
 
                     fetchedMenuMakanan?.data?.forEach {
                         if (it.type == "Food") {
