@@ -13,7 +13,7 @@ import com.malikrafsan.restaurant_mobile_app.ui.keranjang.KeranjangViewModel
 class MenuAdapter (
     private val context: Context,
     private val listMenu: List<Cart>,
-    private val viewModel: KeranjangViewModel
+    private val viewModel: MenuViewModel
 ): RecyclerView.Adapter<MenuAdapter.Holder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         val itemView = LayoutInflater.from(parent.context).inflate(com.malikrafsan.restaurant_mobile_app.R.layout.list_makanan, parent, false)

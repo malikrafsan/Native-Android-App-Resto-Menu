@@ -13,10 +13,7 @@ import com.malikrafsan.restaurant_mobile_app.api.BranchApi
 import com.malikrafsan.restaurant_mobile_app.builder.ApiBuilder
 import com.malikrafsan.restaurant_mobile_app.dto.Branch
 import com.malikrafsan.restaurant_mobile_app.ui.keranjang.RestaurantViewModel
-import com.malikrafsan.restaurant_mobile_app.ui.menu.MenuAdapter
-import com.malikrafsan.restaurant_mobile_app.ui.menu.MenuViewModel
 import kotlinx.coroutines.*
-import kotlin.system.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
