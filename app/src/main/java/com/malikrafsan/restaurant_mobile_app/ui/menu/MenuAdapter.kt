@@ -36,7 +36,7 @@ class MenuAdapter (
         holder.hargaMakanan.text = context.getString(com.malikrafsan.restaurant_mobile_app.R.string.hargaMakanan, currentItem.currency, harga)
         holder.terjualMakanan.text = sold
         holder.deskripsiMakanan.text = currentItem.description
-        holder.totalPesanMakanan.text = currentItem.qty.toString()
+        holder.totalPesanMakanan.text = if (currentItem.qty == 0) { "1" } else { currentItem.qty.toString() }
 
         if (currentItem.qty == 0) {
             holder.minusButton.visibility = View.INVISIBLE
