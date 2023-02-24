@@ -223,7 +223,7 @@ class ScanPaymentActivity : AppCompatActivity() {
                 .setStyle(Notification.BigTextStyle()
                     .bigText(statusDesc))
                 .setSmallIcon(icon)
-                .setLargeIcon(BitmapFactory.decodeResource(this.resources, R.drawable.ok))
+                .setLargeIcon(BitmapFactory.decodeResource(this.resources, icon))
                 .setContentIntent(pendingIntent)
         } else {
             builder = Notification.Builder(this)
@@ -233,7 +233,7 @@ class ScanPaymentActivity : AppCompatActivity() {
                 .setStyle(Notification.BigTextStyle()
                     .bigText(statusDesc))
                 .setSmallIcon(icon)
-                .setLargeIcon(BitmapFactory.decodeResource(this.resources, R.drawable.ok))
+                .setLargeIcon(BitmapFactory.decodeResource(this.resources, icon))
                 .setContentIntent(pendingIntent)
         }
 
@@ -265,8 +265,10 @@ class ScanPaymentActivity : AppCompatActivity() {
         this.textViewStatus.text = statusMsg
         this.textViewDescription.text = statusDesc
 
-        val imgAnim = AnimationUtils.loadAnimation(this, R.anim.grow_fade_in)
-        this.imageViewStatusIcon.startAnimation(imgAnim)
+        if (isSuccess) {
+            val imgAnim = AnimationUtils.loadAnimation(this, R.anim.grow_fade_in)
+            this.imageViewStatusIcon.startAnimation(imgAnim)
+        }
     }
 
     private fun hideStatus() {

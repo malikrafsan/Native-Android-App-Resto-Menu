@@ -6,5 +6,6 @@ data class MenuData(
     val name: String,
     val price: Int,
     val sold: Int,
-    val type: String
+    val type: String,
+    var qty: Int = 0,
 )
