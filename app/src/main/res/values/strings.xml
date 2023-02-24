@@ -17,9 +17,10 @@
     <string name="hargaMakanan">%1$s %2$s</string>
     <string name="minus_sign">-</string>
     <string name="plus_sign">+</string>
-    <string name="placeholder_search">Search…</string>
+    <string name="placeholder_search">Search</string>
     <string name="makanan">Makanan</string>
     <string name="minuman">Minuman</string>
+    <string name="menuNotFound">Makanan tidak ditemukan</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="celcius_symbol">°C</string>

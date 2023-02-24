@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
@@ -34,10 +35,11 @@ class MenuFragment : Fragment() {
     private lateinit var menuMakananRecyclerView: RecyclerView
     private lateinit var menuMinumanRecyclerView: RecyclerView
     private lateinit var searchView: SearchView
-    private lateinit var makananAdapter: MenuAdapter
-    private lateinit var minumanAdapter: MenuAdapter
     private lateinit var makananSection: LinearLayout
     private lateinit var minumanSection: LinearLayout
+    private lateinit var notFoundTextView: TextView
+    private lateinit var makananTextView: TextView
+    private lateinit var minumanTextView: TextView
     private val menuMakanan: MutableList<Cart> = mutableListOf()
     private val tempMenuMakanan: MutableList<Cart> = mutableListOf()
     private val menuMinuman: MutableList<Cart> = mutableListOf()
@@ -92,7 +94,25 @@ class MenuFragment : Fragment() {
         searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 Log.d("Search", "Enter $query")
-                return true
+                if (query!!.isNotEmpty()) {
+                    tempMenuMakanan.clear()
+                    tempMenuMinuman.clear()
+
+                    menuMakanan.forEach { currentMenu ->
+                        if (currentMenu.name.lowercase().contains(query)) tempMenuMakanan.add(currentMenu)
+                    }
+
+                    menuMinuman.forEach { currentMenu ->
+                        if (currentMenu.name.lowercase().contains(query)) tempMenuMinuman.add(currentMenu)
+                    }
+
+                    hideSection()
+                    menuMakananRecyclerView.adapter!!.notifyDataSetChanged()
+                    menuMinumanRecyclerView.adapter!!.notifyDataSetChanged()
+                } else {
+                    notifyDataChanged()
+                }
+                return false
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
@@ -111,6 +131,7 @@ class MenuFragment : Fragment() {
                         if (currentMenu.name.lowercase().contains(searchText)) tempMenuMinuman.add(currentMenu)
                     }
 
+                    hideSection()
                     menuMakananRecyclerView.adapter!!.notifyDataSetChanged()
                     menuMinumanRecyclerView.adapter!!.notifyDataSetChanged()
                 } else {
@@ -180,6 +201,9 @@ class MenuFragment : Fragment() {
     private fun registerElmt() {
         menuMakananRecyclerView = binding.menuMakananRecyclerView
         menuMinumanRecyclerView = binding.menuMinumanRecyclerView
+        notFoundTextView = binding.notFoundTextView
+        makananTextView = binding.makananTextView
+        minumanTextView = binding.minumanTextView
         searchView = binding.searchView
         searchView.clearFocus()
 
@@ -222,6 +246,7 @@ class MenuFragment : Fragment() {
                         }
                     }
 
+                    hideSection()
                     menuMakananRecyclerView.adapter!!.notifyDataSetChanged()
                     menuMinumanRecyclerView.adapter!!.notifyDataSetChanged()
                 }
@@ -235,6 +260,29 @@ class MenuFragment : Fragment() {
             }
 
         })
+    }
+
+    private fun hideSection() {
+        Log.d("Hide Menu", "First")
+        if (((menuMakanan.size != 0) and (tempMenuMakanan.size == 0)) and ((menuMinuman.size != 0) and (tempMenuMinuman.size == 0))) {
+            Log.d("Hide Menu", "Tidak ada data sama sekali")
+            notFoundTextView.visibility = View.VISIBLE
+            makananTextView.visibility = View.GONE
+            minumanTextView.visibility = View.GONE
+        } else {
+            Log.d("Hide Menu", "Terdapat beberapa data")
+            notFoundTextView.visibility = View.GONE
+            if ((menuMakanan.size != 0) and (tempMenuMakanan.size == 0)) {
+                makananTextView.visibility = View.GONE
+            } else {
+                makananTextView.visibility = View.VISIBLE
+            }
+            if ((menuMinuman.size != 0) and (tempMenuMinuman.size == 0)) {
+                minumanTextView.visibility = View.GONE
+            } else {
+                minumanTextView.visibility = View.VISIBLE
+            }
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
