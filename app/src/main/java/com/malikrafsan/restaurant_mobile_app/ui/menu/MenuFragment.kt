@@ -57,13 +57,18 @@ class MenuFragment : Fragment() {
             container,
             false
         )
+
+        Log.d("Element", "Start")
+        registerElmt()
+        registerEvent()
+        Log.d("Element", "Finish")
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        registerElmt()
-        registerEvent()
+//        registerElmt()
+//        registerEvent()
 
         Log.d("MenuFragment", "Load menu from database")
         loadMenu()
@@ -186,8 +191,9 @@ class MenuFragment : Fragment() {
             }
         }
 
-//        notifyDataChanged()
+        notifyDataChanged()
         searchView.setQuery(viewModel.searchQuery, true)
+        Log.d("MenuFragment", "Finish sync menu")
     }
 
     private fun notifyDataChanged() {
