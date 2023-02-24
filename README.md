@@ -15,13 +15,19 @@ Berikut adalah library yang kami gunakan untuk membangun Aplikasi Majika
 1. Code scanner by yuriy-budiyev
 2. Retrofit
 3. Camerax
+4. Room
+5. Android Navigation
+6. Android Core
+7. Android Material
+8. Android Lifecycle
+9. Android Constraint Layout
 
 ## Screenshot
 
-1. Splash Screen
+### Splash Screen
    ![Splash Screen](./screenshot/splash_screen.jpg)
 
-2. Menu
+### Menu
 
 - Menu Makanan
   ![Menu Makanan](./screenshot/menu_makanan_suhu.png)
@@ -29,10 +35,10 @@ Berikut adalah library yang kami gunakan untuk membangun Aplikasi Majika
 - Menu Minuman
   ![Menu Minuman](./screenshot/menu_minuman_suhu.png)
 
-4. Keranjang
+### Keranjang
    ![Keranjang](./screenshot/keranjang.jpg)
 
-5. Pembayaran
+### Pembayaran
 
 - Pembayaran Sukses
   ![Pembayaran Sukses](./screenshot/pembayaran_sukses.jpg)
@@ -40,10 +46,10 @@ Berikut adalah library yang kami gunakan untuk membangun Aplikasi Majika
 - Pembayaran Gagal
   ![Pembayaran Gagal](./screenshot/pembayaran_gagal.jpg)
 
-6. Cabang Restoran
+### Cabang Restoran
    ![Cabang Restoran](./screenshot/cabang_restoran.jpg)
 
-7. Twibbon
+### Twibbon
 
 - Take Twibbon
   ![Twibbon](./screenshot/twibbon.jpg)
@@ -56,5 +62,5 @@ Berikut adalah library yang kami gunakan untuk membangun Aplikasi Majika
 | NIM      | Nama                            | Pembagian Pekerjaan                                                                       | Jumlah jam persiapan dan pengerjaan |
 | -------- | ------------------------------- | ----------------------------------------------------------------------------------------- | ----------------------------------- |
 | 13520057 | Marcellus Michael Herman Kahari | Navigation Bar, Keranjang, Branch Restoran, Payment, Layouting                            | 30                                  |
-| 13520105 | Malik Akbar Hashemi Rafsanjani  | Splash Screen, BuildAPI, Header, Repository, Twibbon, Scan Payment, Save State, Layouting | 36                                  |
+| 13520105 | Malik Akbar Hashemi Rafsanjani  | Splash Screen, API Backend Integration, Header Fragment, Room Repository, Twibbon, Scan Payment, Save State, Layouting | 36                                  |
 | 13520117 | Hafidz Nur Rahman Ghozali       | Menu + Responsive, Pencarian, Repository, Layouting                                       | 30                                  |
