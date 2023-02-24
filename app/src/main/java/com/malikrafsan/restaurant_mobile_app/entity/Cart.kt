@@ -1,5 +1,7 @@
 package com.malikrafsan.restaurant_mobile_app.entity
 
+import android.os.Parcel
+import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.malikrafsan.restaurant_mobile_app.dto.Menu
@@ -15,8 +17,43 @@ data class Cart(
     val sold: Int,
     val type: String,
     var qty: Int,
-) {
-    companion object {
+): Parcelable {
+    constructor(parcel: Parcel) : this(
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readInt(),
+        parcel.readInt(),
+        parcel.readString()!!,
+        parcel.readInt()
+    ) {
+    }
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeString(id)
+        parcel.writeString(name)
+        parcel.writeString(currency)
+        parcel.writeString(description)
+        parcel.writeInt(price)
+        parcel.writeInt(sold)
+        parcel.writeString(type)
+        parcel.writeInt(qty)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<Cart> {
+        override fun createFromParcel(parcel: Parcel): Cart {
+            return Cart(parcel)
+        }
+
+        override fun newArray(size: Int): Array<Cart?> {
+            return arrayOfNulls(size)
+        }
+
         private fun createId(menu: MenuData): String {
             return "${menu.name}-${menu.price}-${menu.currency}-${menu.type}"
         }

@@ -1,6 +1,7 @@
 package com.malikrafsan.restaurant_mobile_app.ui.menu
 
 import android.os.Bundle
+import android.os.Parcelable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -205,6 +206,14 @@ class MenuFragment : Fragment() {
     }
 
     private fun notifyDataChanged() {
+        for (datum in menuMakanan) {
+            Log.d("MenuFragment", "Menu makanan: ${datum.id} ${datum.name} ${datum.qty} ${datum.price} ${datum.type}")
+        }
+
+        for (datum in menuMinuman) {
+            Log.d("MenuFragment", "Menu minuman: ${datum.id} ${datum.name} ${datum.qty} ${datum.price} ${datum.type}")
+        }
+
         tempMenuMakanan.clear()
         tempMenuMakanan.addAll(menuMakanan)
         menuMakananRecyclerView.adapter!!.notifyDataSetChanged()
@@ -305,6 +314,67 @@ class MenuFragment : Fragment() {
         super.onCreate(savedInstanceState)
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        val foodState = menuMakananRecyclerView.layoutManager?.onSaveInstanceState()
+        val drinkState = menuMinumanRecyclerView.layoutManager?.onSaveInstanceState()
+
+        val arrMenuMakanan = ArrayList<Cart>()
+        for (datum in menuMakanan) {
+            arrMenuMakanan.add(datum)
+        }
+
+        val arrMenuMinuman = ArrayList<Cart>()
+        for (datum in menuMinuman) {
+            arrMenuMinuman.add(datum)
+        }
+
+        outState.putParcelable("foodState", foodState)
+        outState.putParcelable("drinkState", drinkState)
+
+        outState.putParcelableArrayList("arrMenuMakanan", arrMenuMakanan)
+        outState.putParcelableArrayList("arrMenuMinuman", arrMenuMinuman)
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+
+        if (savedInstanceState != null) {
+            val foodState = savedInstanceState.getParcelable<Parcelable>("foodState")
+            val drinkState = savedInstanceState.getParcelable<Parcelable>("drinkState")
+
+            val arrMenuMakanan = savedInstanceState.getParcelableArrayList<Cart>("arrMenuMakanan")
+            val arrMenuMinumam = savedInstanceState.getParcelableArrayList<Cart>("arrMenuMinuman")
+
+            tempMenuMakanan.clear()
+            tempMenuMinuman.clear()
+            arrMenuMakanan?.forEach {
+                menuMakanan.add(it)
+            }
+            arrMenuMinumam?.forEach {
+                menuMinuman.add(it)
+            }
+
+            menuMakananRecyclerView.layoutManager = LinearLayoutManager(context)
+            menuMinumanRecyclerView.layoutManager = LinearLayoutManager(context)
+            menuMakananRecyclerView.layoutManager?.onRestoreInstanceState(foodState)
+            menuMinumanRecyclerView.layoutManager?.onRestoreInstanceState(drinkState)
+
+            menuMakananRecyclerView.adapter = MenuAdapter(
+                requireContext(),
+                tempMenuMakanan,
+                viewModel,
+            )
+            menuMinumanRecyclerView.adapter = MenuAdapter(
+                requireContext(),
+                tempMenuMinuman,
+                viewModel,
+            )
+
+            notifyDataChanged()
+        }
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
