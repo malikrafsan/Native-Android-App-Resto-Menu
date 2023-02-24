@@ -15,6 +15,7 @@ class MenuViewModel @Inject constructor(
     private val repository: CartRepository
 ) : ViewModel() {
     val carts = repository.getAll()
+    var searchQuery : String = ""
 
     fun onEvent(event: CartEvent){
         when(event){

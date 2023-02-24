@@ -106,9 +106,9 @@ class MenuFragment : Fragment() {
                         if (currentMenu.name.lowercase().contains(query)) tempMenuMinuman.add(currentMenu)
                     }
 
-                    hideSection()
                     menuMakananRecyclerView.adapter!!.notifyDataSetChanged()
                     menuMinumanRecyclerView.adapter!!.notifyDataSetChanged()
+                    hideSection()
                 } else {
                     notifyDataChanged()
                 }
@@ -131,13 +131,14 @@ class MenuFragment : Fragment() {
                         if (currentMenu.name.lowercase().contains(searchText)) tempMenuMinuman.add(currentMenu)
                     }
 
-                    hideSection()
                     menuMakananRecyclerView.adapter!!.notifyDataSetChanged()
                     menuMinumanRecyclerView.adapter!!.notifyDataSetChanged()
+                    hideSection()
                 } else {
                     notifyDataChanged()
                 }
 
+                viewModel.searchQuery = newText
                 return true
             }
         })
@@ -185,7 +186,8 @@ class MenuFragment : Fragment() {
             }
         }
 
-        notifyDataChanged()
+//        notifyDataChanged()
+        searchView.setQuery(viewModel.searchQuery, true)
     }
 
     private fun notifyDataChanged() {
