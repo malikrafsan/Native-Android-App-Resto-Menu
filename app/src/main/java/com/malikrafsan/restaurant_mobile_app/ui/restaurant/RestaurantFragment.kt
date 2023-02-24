@@ -46,6 +46,8 @@ class RestaurantFragment : Fragment() {
                 override fun onResponse(call: Call<Branch>, response: Response<Branch>) {
                     if (response.isSuccessful) {
                         response.body()?.let {
+                            datarestaurant.clear()
+
                             val fetchedMenu: Branch? = response.body()
                             fetchedMenu?.data?.forEach{
                                 datarestaurant.add(RestaurantViewModel(it.name, it.address, it.phone_number, it.latitude, it.longitude))
@@ -98,6 +100,7 @@ class RestaurantFragment : Fragment() {
             val state = savedInstanceState.getParcelable<Parcelable>("state")
             val data = savedInstanceState.getParcelableArrayList<RestaurantViewModel>("data")
 
+            datarestaurant.clear()
             for (i in data!!) {
                 datarestaurant.add(i)
             }
