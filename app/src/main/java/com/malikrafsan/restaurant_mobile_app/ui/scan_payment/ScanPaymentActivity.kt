@@ -182,6 +182,9 @@ class ScanPaymentActivity : AppCompatActivity() {
 
                     createNotif(false, "Gagal", "Pesanan gagal dibayarkan")
                     displayStatus(false, "Gagal", "Pesanan gagal dibayarkan")
+                    val newIntent = Intent(this@ScanPaymentActivity, ScanPaymentActivity::class.java)
+                    startActivity(newIntent)
+                    finish()
                 }
             }
             @RequiresApi(Build.VERSION_CODES.TIRAMISU)
@@ -190,6 +193,9 @@ class ScanPaymentActivity : AppCompatActivity() {
 
                 createNotif(false, "Gagal", "Pesanan gagal dibayarkan")
                 displayStatus(false, "Gagal", "Pesanan gagal dibayarkan")
+                val newIntent = Intent(this@ScanPaymentActivity, ScanPaymentActivity::class.java)
+                startActivity(newIntent)
+                finish()
             }
         })
     }
