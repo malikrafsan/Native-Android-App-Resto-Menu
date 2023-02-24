@@ -113,10 +113,11 @@ class MenuFragment : Fragment() {
 
                     menuMakananRecyclerView.adapter!!.notifyDataSetChanged()
                     menuMinumanRecyclerView.adapter!!.notifyDataSetChanged()
-                    hideSection()
                 } else {
                     notifyDataChanged()
                 }
+
+                hideSection()
                 return false
             }
 
@@ -138,11 +139,11 @@ class MenuFragment : Fragment() {
 
                     menuMakananRecyclerView.adapter!!.notifyDataSetChanged()
                     menuMinumanRecyclerView.adapter!!.notifyDataSetChanged()
-                    hideSection()
                 } else {
                     notifyDataChanged()
                 }
 
+                hideSection()
                 viewModel.searchQuery = newText
                 return true
             }
@@ -153,6 +154,13 @@ class MenuFragment : Fragment() {
         Log.d("MenuFragment", "Sync menu from database")
         for (cart in listCart) {
             Log.d("MenuFragment", "Cart: ${cart.id} ${cart.name} ${cart.qty} ${cart.price} ${cart.type}")
+        }
+        if ((menuMakanan.size == 0) and (menuMinuman.size == 0)) {
+            tempMenuMakanan.clear()
+            tempMenuMinuman.clear()
+            menuMakananRecyclerView.adapter!!.notifyDataSetChanged()
+            menuMinumanRecyclerView.adapter!!.notifyDataSetChanged()
+            return
         }
 
         var found: Boolean = false
